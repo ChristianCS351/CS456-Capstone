@@ -1,0 +1,90 @@
+/* styles page */
+/* Reset some default browser styles */
+
+/* this is starting code from my lab6*/
+
+body, h1, h2, p, ul {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 400;
+}
+
+p {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+header {
+    background-color: orangered;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+main {
+    padding: 20px;
+    background-color: rgba(93, 180, 98, 0.7);
+}
+
+.about-me, .projects, .collections, .about, .dailys, .report, .questions{
+    background-color: #f0f8ff;
+    padding: 20px;
+    padding-left: 40px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    border-radius: 8px; /* rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow */
+}
+
+.projects {
+    background-color: #fe4401b8;
+}
+
+.collections {
+    background-image: url('penguin-sunglasses.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.45); /* subtle overlay */
+    background-blend-mode: overlay;
+}
+
+.about {
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.2); /* subtle overlay */
+    background-blend-mode: overlay;
+}
+
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+a {
+    color: #00f;
+}
