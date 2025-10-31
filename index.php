@@ -1,19 +1,19 @@
 <?php
-// Database completely disabled for local testing.
-// $host = 'localhost'; 
-// $dbname = '351final'; 
-// $user = 'root'; 
-// $pass = 'mysql';
-// $charset = 'utf8mb4';
+ //Database completely disabled for local testing.
+$host = 'localhost'; 
+$dbname = 'pantry'; 
+$user = 'root'; 
+$pass = 'mysql';
+$charset = 'utf8mb4';
 
-// $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
-// $options = [
-//     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-//     PDO::ATTR_EMULATE_PREPARES   => false,
-// ];
+$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
 
-// $pdo = new PDO($dsn, $user, $pass, $options); // commented out
+$pdo = new PDO($dsn, $user, $pass, $options); // commented out
 
 $search = '';
 $recipes = []; // empty placeholder array so the rest of your page works
