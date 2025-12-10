@@ -1,9 +1,9 @@
 <?php
- Database connection removed for local testing
- $host = 'localhost';
- $user = 'root'; 
- $pass = 'mysql'; 
- $dbname = 'pantry';
+// Database connection removed for local testing
+// $host = 'localhost';
+// $user = 'root'; 
+// $pass = 'mysql'; 
+// $dbname = '351final';
 
 // try {
 //     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);

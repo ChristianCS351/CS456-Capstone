@@ -1,8 +1,8 @@
 <?php
- //Database completely disabled for local testing.
-$host = 'localhost'; 
-$dbname = 'pantry'; 
-$user = 'root'; 
+// ---------- DATABASE CONNECTION ----------
+$host = 'localhost';
+$dbname = 'pantry';
+$user = 'root';
 $pass = 'mysql';
 $charset = 'utf8mb4';
 
@@ -13,141 +13,333 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
-$pdo = new PDO($dsn, $user, $pass, $options); // commented out
-
-$search = '';
-$recipes = []; // empty placeholder array so the rest of your page works
-
-// Simulated behavior: if someone submits a recipe, just reload without doing SQL
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // skip database insert/delete, just reload
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
 }
+
+// ---------------------------------------------------------------------------
+// EXPIRING SOON LIMIT (default 5 → expand to 10)
+$exp_limit = 5;
+if (isset($_GET['exp']) && $_GET['exp'] == 10) {
+    $exp_limit = 10;
+}
+
+$expiringStmt = $pdo->prepare("SELECT name, expiration_date, quantity 
+                               FROM foods 
+                               ORDER BY expiration_date ASC 
+                               LIMIT :lim");
+$expiringStmt->bindValue(':lim', (int)$exp_limit, PDO::PARAM_INT);
+$expiringStmt->execute();
+$expiringFoods = $expiringStmt->fetchAll();
+
+// ---------------------------------------------------------------------------
+// GROCERY LIST LIMIT (default 5 → expand to 10)
+$g_limit = 5;
+if (isset($_GET['gro']) && $_GET['gro'] == 10) {
+    $g_limit = 10;
+}
+
+$groceryStmt = $pdo->prepare("SELECT name, quantity, barcode 
+                              FROM shop_list 
+                              ORDER BY id ASC 
+                              LIMIT :lim");
+$groceryStmt->bindValue(':lim', (int)$g_limit, PDO::PARAM_INT);
+$groceryStmt->execute();
+$groceryItems = $groceryStmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Nutrition Tracker</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Pantry Pilot</title>
+    <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
+
+    <!-- Slick slider CSS (for rotating header background) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
-    header {
-        background-image: url('header.jpg');
-        background-size: 100%;
-        background-position: center;
-        background-color: rgba(255, 255, 255, 0.3); /* subtle overlay */
-        background-blend-mode: overlay;
-        padding:150px;
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #222;
+        }
+
+        .header-container {
+            background-color: #ffcf33;
+            border-bottom: 10px solid #ffcf33;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ---------- TOP NAVIGATION ---------- */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 25px;
+            background-color: #ffcf33;
+        }
+
+        .top-nav .nav-left a,
+        .top-nav .nav-right a {
+            margin-right: 20px;
+            color: #1b5e20;
+            font-style: italic;
+            font-size: 17px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+            cursor: pointer;
+        }
+
+        .top-nav .nav-right a:last-child {
+            margin-right: 0;
+        }
+
+        .top-nav a:hover {
+            color: #145214;
+            text-decoration: underline;
+        }
+
+        /* ---------- HEADER WITH ROTATING BACKGROUND ---------- */
+        header {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Make slider fill FULL width + height */
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Make overlay LESS transparent (stronger white layer) */
+header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.30);   /* was 0.55 – now stronger */
+    z-index: 1;
+}
+
+/* Logo stays above overlay */
+header img {
+    position: relative;
+    z-index: 2;
+    height: 190px;
+    object-fit: contain;
+}
+
+        /* ---------- MAIN CONTENT ---------- */
+        main {
+            margin: 40px auto;
+            max-width: 1000px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 30px 40px 45px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            color: #1b5e20;
+            text-align: center;
+            border-bottom: 3px solid #ffcf33;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background-color: #1b5e20;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 17px;
+        }
+
+        td {
+            background-color: #f7f7f7;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover td {
+            background-color: #e8f5e9;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        body, h2, th, td, p {
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
-    <!-- llm polished this up, looks much better, also added mouse hovering animation -->
-<header style="border: 2px solid white; border-radius: 8px; padding: 20px; text-align: center; background-color: #f4f4f4; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-    <nav>
-    <h1 style="color: green; font-family: Arial, sans-serif; margin-bottom: 20px;">Bryson's Nutrition Tracker</h1>
-        <style>
-            button {
-                background-color: darkgreen;
-                color: white;
-                border: none;
-                border-radius: 12px;
-                padding: 15px 20px;
-                font-size: 16px;
-                cursor: pointer;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth transition for hover effects */
-            }
-            button:hover {
-                transform: scale(1.1); /* Increases size by 10% */
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adds a stronger shadow on hover */
-            }
-        </style>
-        <button onclick="window.location.href='tracking.php';">
-            Track Macros
-        </button>
-        <button style="position: absolute; top: 20px; right: 20px; background-color: darkgreen; color: white; border: none; border-radius: 12px; padding: 10px 15px; font-size: 14px; cursor: pointer; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); transition: transform 0.2s ease, box-shadow 0.2s ease;" onclick="window.location.href='login.php';">
-        Login
-    </button>
-    </nav>
-</header>
 
-
-    <main>
-
-    <section class="dailys">
-    <h2 style="text-align: center;">Daily Recipes</h2>
-    <p style="text-align: center;">Today's 3 recipes</p>
-
-    <div class="container" style="display: flex; justify-content: center; gap: 100px; text-align: center; margin-top: 20px;">
-
-        <!-- First Recipe -->
-        <div class="item" style="width: 190px;">
-            <img src="pasta.jpg" alt="Image 1" style="width: 100%; border-radius: 8px;">
-            <p>Four Cheese Pasta</p>
-            <form action="" method="post">
-                <input type="hidden" name="name" value="Four Cheese Pasta">
-                <input type="hidden" name="calories" value="500">
-                <input type="hidden" name="fats" value="20">
-                <input type="hidden" name="carbs" value="50">
-                <input type="hidden" name="protien" value="15">
-                <input type="hidden" name="ingredients" value="Cheese, Pasta, Cream">
-                <input type="hidden" name="size" value="550">
-                <button type="submit" style="margin-top: 10px; padding: 5px 10px; background-color: darkgreen; color: white; border: none; border-radius: 5px; cursor: pointer;">Add Recipe</button>
-            </form>
+<div class="header-container">
+    <!-- TOP NAVIGATION LINKS -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="index.php">Home</a>
+            <a href="tracking.php">Pantry</a>
+            <a href="grocery.php">Shopping List</a>
         </div>
-
-        <!-- Second Recipe -->
-        <div class="item" style="width: 190px;">
-            <img src="sushi.jpg" alt="Image 2" style="width: 100%; border-radius: 8px;">
-            <p>Tango Roll</p>
-            <form action="" method="post">
-                <input type="hidden" name="name" value="Tango Roll">
-                <input type="hidden" name="calories" value="500">
-                <input type="hidden" name="fats" value="20">
-                <input type="hidden" name="carbs" value="50">
-                <input type="hidden" name="protien" value="15">
-                <input type="hidden" name="ingredients" value="Rice, Salmon, Avocado">
-                <input type="hidden" name="size" value="360">
-                <button type="submit" style="margin-top: 10px; padding: 5px 10px; background-color: darkgreen; color: white; border: none; border-radius: 5px; cursor: pointer;">Add Recipe</button>
-            </form>
-        </div>
-
-        <!-- Third Recipe -->
-        <div class="item" style="width: 190px;">
-            <img src="glorp.jpg" alt="Image 3" style="width: 100%; border-radius: 8px;">
-            <p>Zlorpian Stew</p>
-            <form action="" method="post">
-                <input type="hidden" name="name" value="Zlorpian Stew">
-                <input type="hidden" name="calories" value="500">
-                <input type="hidden" name="fats" value="20">
-                <input type="hidden" name="carbs" value="50">
-                <input type="hidden" name="protien" value="15">
-                <input type="hidden" name="ingredients" value="Alien Herbs, Broth, Mystery Meat">
-                <input type="hidden" name="size" value="700">
-                <button type="submit" style="margin-top: 10px; padding: 5px 10px; background-color: darkgreen; color: white; border: none; border-radius: 5px; cursor: pointer;">Add Recipe</button>
-            </form>
+        <div class="nav-right">
+            <a href="AccountInfo.php">Account Info</a>
+            <a href="login.php">Login</a>
         </div>
     </div>
-</section>
 
-        
-        <section class="about">
-            <h2 style="text-align: center;">Why Use Our Tracker?</h2>
-            <table>
+    <header>
+        <!-- Rotating background images -->
+        <div class="hero-slide">
+            <div>
+                <img src="pasta.jpg" alt="Jars of Pasta">
+            </div>
+            <div>
+                <img src="frozen-foods-displayed-supermarket-freezer-section_641503-100271.avif" alt="Freezers with Food">
+            </div>
+            <div>
+                <img src="OIP.webp" alt="Fruit Stacked">
+            </div>
+            <div>
+                <img src="00-FOOD-PANTRIES-CLOSING-SAVEUR.webp" alt="Various Pantry Foods">
+            </div>
+            <div>
+                <img src="produce-vegetables.jpg" alt="Fresh Produce">
+            </div>
+        </div>
+
+        <!-- Center logo (clickable) -->
+        <a href="index.php">
+            <img src="pantry_pilot_logo-removebg-preview.png" alt="Pantry Pilot Logo">
+        </a>
+    </header>
+</div>
+
+<main>
+
+    <!-- EXPIRING SOON TABLE -->
+    <section id="expiring-soon">
+        <h2>EXPIRING SOON</h2>
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Expiration Date</th>
+                <th>Quantity</th>
+            </tr>
+            <?php foreach ($expiringFoods as $food): ?>
                 <tr>
-                <td style="text-align: center">When you use Bryson's Nutrition Tracker, you are able to keep track of your macros all in one convienint place. And this can be even more accurate when paired with a basic food scale. </td></tr>
-            </table>
-        </section>
+                    <td><?= htmlspecialchars($food['name']) ?></td>
+                    <td><?= htmlspecialchars($food['expiration_date']) ?></td>
+                    <td><?= htmlspecialchars($food['quantity']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
 
-    
-    </main>
-    <footer>
-        <nav><p></p>| 
-            <a href="about.php">Help</a> | 
-            
-        </p></nav>
-    </footer>
+        <!-- SEE MORE / SEE LESS FOR EXPIRING SOON -->
+        <div style="text-align:center; margin-top: 15px;">
+            <?php if ($exp_limit == 5): ?>
+                <a href="?exp=10&gro=<?= $g_limit ?>"
+                   style="color:#1b5e20; font-style:italic; font-weight:600; text-decoration:none;">
+                    See More
+                </a>
+            <?php else: ?>
+                <a href="?exp=5&gro=<?= $g_limit ?>"
+                   style="color:#1b5e20; font-style:italic; font-weight:600; text-decoration:none;">
+                    See Less
+                </a>
+            <?php endif; ?>
+        </div>
+    </section>
+
+    <!-- CURRENT GROCERY LIST TABLE -->
+    <section id="current-grocery">
+        <h2>CURRENT GROCERY LIST</h2>
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Barcode</th>
+            </tr>
+            <?php foreach ($groceryItems as $item): ?>
+                <tr>
+                    <td><?= htmlspecialchars($item['name']) ?></td>
+                    <td><?= htmlspecialchars($item['quantity']) ?></td>
+                    <td><?= htmlspecialchars($item['barcode']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+
+        <!-- SEE MORE / SEE LESS BUTTON -->
+        <div style="text-align:center; margin-top: 15px;">
+            <?php if ($g_limit == 5): ?>
+                <a href="?gro=10&exp=<?= $exp_limit ?>"
+                   style="color:#1b5e20; font-style:italic; font-weight:600; text-decoration:none;">
+                    See More
+                </a>
+            <?php else: ?>
+                <a href="?gro=5&exp=<?= $exp_limit ?>"
+                   style="color:#1b5e20; font-style:italic; font-weight:600; text-decoration:none;">
+                    See Less
+                </a>
+            <?php endif; ?>
+        </div>
+    </section>
+
+</main>
+
+<!-- Slick slider JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+$(document).ready(function(){
+    $('.hero-slide').slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        infinite: true,
+        autoplaySpeed: 5600,
+        arrows: false,
+        speed: 3800,
+        fade: true,
+        cssEase: 'linear'
+    });
+});
+</script>
+
 </body>
 </html>
