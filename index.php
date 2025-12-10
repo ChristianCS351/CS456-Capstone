@@ -272,12 +272,12 @@ header img {
         <div style="text-align:center; margin-top: 15px;">
             <?php if ($exp_limit == 5): ?>
                 <a href="?exp=10&gro=<?= $g_limit ?>"
-                   style="color:#1b5e20; font-style:italic; font-weight:600; text-decoration:none;">
+                   style="color:#1b5e20; font-weight:600; text-decoration:none;">
                     See More
                 </a>
             <?php else: ?>
                 <a href="?exp=5&gro=<?= $g_limit ?>"
-                   style="color:#1b5e20; font-style:italic; font-weight:600; text-decoration:none;">
+                   style="color:#1b5e20; font-weight:600; text-decoration:none;">
                     See Less
                 </a>
             <?php endif; ?>
@@ -306,12 +306,12 @@ header img {
         <div style="text-align:center; margin-top: 15px;">
             <?php if ($g_limit == 5): ?>
                 <a href="?gro=10&exp=<?= $exp_limit ?>"
-                   style="color:#1b5e20; font-style:italic; font-weight:600; text-decoration:none;">
+                   style="color:#1b5e20;font-weight:600; text-decoration:none;">
                     See More
                 </a>
             <?php else: ?>
                 <a href="?gro=5&exp=<?= $exp_limit ?>"
-                   style="color:#1b5e20; font-style:italic; font-weight:600; text-decoration:none;">
+                   style="color:#1b5e20;font-weight:600; text-decoration:none;">
                     See Less
                 </a>
             <?php endif; ?>
