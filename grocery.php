@@ -58,11 +58,13 @@ if ($result) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
-        /* ---------- HEADER / GLOBAL ---------- */
+        /* ---------- HEADER / GLOBAL (MATCH TRACKING/INDEX) ---------- */
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: white;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #222;
         }
 
         .header-container {
@@ -72,6 +74,7 @@ if ($result) {
             overflow: hidden;
         }
 
+        /* TOP NAV EXACTLY LIKE OTHER PAGES */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -151,34 +154,36 @@ if ($result) {
 
         /* ---------- MAIN LAYOUT ---------- */
         .main-content {
+            max-width: 1100px;
+            margin: 40px auto;
             display: flex;
-            justify-content: space-around;
-            align-items: flex-start;
-            padding: 40px;
+            justify-content: space-between;
+            gap: 30px;
         }
 
         .grocery-section {
-            width: 55%;
-        }
-
-        .grocery-section h2 {
-            text-align: center;
-            color: #004b23;
-            margin-bottom: 15px;
-            font-style: italic;
+            flex: 1.2;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
         }
 
         .add-section {
-            width: 35%;
-            border-left: 2px solid #ccc;
-            padding-left: 40px;
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
         }
 
+        .grocery-section h2,
         .add-section h2 {
             text-align: center;
-            color: #004b23;
-            font-style: italic;
-            margin-bottom: 20px;
+            color: #1b5e20;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #ffcf33;
+            padding-bottom: 8px;
         }
 
         /* ---------- TABLE ---------- */
@@ -186,18 +191,25 @@ if ($result) {
             border-collapse: collapse;
             width: 100%;
             text-align: center;
-            border: 1px solid #000;
         }
 
         th, td {
-            border: 1px solid #000;
-            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
         }
 
         th {
-            background-color: #004b23;
-            color: white; /* headers white */
+            background-color: #1b5e20;
+            color: white;
             font-weight: bold;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f7f7f7;
+        }
+
+        tr:hover td {
+            background-color: #e8f5e9;
         }
 
         /* ---------- BUTTONS ---------- */
@@ -220,6 +232,7 @@ if ($result) {
             cursor: pointer;
             transition: 0.2s;
             text-align: center;
+            border-radius: 8px;
         }
 
         .save-btn:hover,
@@ -234,15 +247,15 @@ if ($result) {
         .add-section label {
             display: block;
             margin: 10px 0 5px;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .add-section input {
             width: 100%;
-            padding: 6px;
-            border: none;
-            border-bottom: 2px solid #000;
-            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #bbb;
+            margin-bottom: 8px;
         }
 
         .submit-wrapper {

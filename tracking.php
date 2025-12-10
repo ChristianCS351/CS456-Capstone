@@ -115,7 +115,6 @@ $pantry_items = $stmt->fetchAll();
             font-family: "Segoe UI", Arial, sans-serif;
             background-color: #f9f9f9;
             color: #222;
-            font-style: italic;
         }
 
         .header-container {
@@ -291,7 +290,6 @@ $pantry_items = $stmt->fetchAll();
             margin-bottom: 8px;
             border-radius: 6px;
             border: 1px solid #bbb;
-            font-style: italic;
         }
 
         .submit-btn, .scan-btn {
