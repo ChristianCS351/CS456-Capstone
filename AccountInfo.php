@@ -42,7 +42,7 @@ if ($result && $result->num_rows > 0) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Account Information</title>
+    <title>Account Info - Pantry Pilot</title>
     <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
 
     <!-- Slick slider CSS (same as index header) -->
@@ -54,13 +54,13 @@ if ($result && $result->num_rows > 0) {
             margin: 0;
             padding: 0;
             font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #fff9ebff;
             color: #222;
         }
 
         .header-container {
             background-color: #ffcf33;
-            border-bottom: 10px solid #ffcf33;
+            border-bottom: 8px solid #ffcf33;
             position: relative;
             overflow: hidden;
         }
@@ -99,7 +99,7 @@ if ($result && $result->num_rows > 0) {
         header {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 400px;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -138,6 +138,12 @@ if ($result && $result->num_rows > 0) {
             height: 190px;
             object-fit: contain;
         }
+
+         /* This enlarges the logo when the pointer is on it */
+        header :hover img {
+            transform: scale(1.08);
+        }
+
 
         header a {
             display: inline-block;
@@ -221,7 +227,7 @@ if ($result && $result->num_rows > 0) {
             <a href="grocery.php">Shopping List</a>
         </div>
         <div class="nav-right">
-            <a href="AccountInfo.php">Account Info</a>
+            <a href="AccountInfo.php", style="color: #145214; text-decoration: underline;">Account Info</a>
             <a href="login.php">Login</a>
         </div>
     </div>
@@ -233,7 +239,7 @@ if ($result && $result->num_rows > 0) {
                 <img src="pasta.jpg" alt="Jars of Pasta">
             </div>
             <div>
-                <img src="frozen-foods-displayed-supermarket-freezer-section_641503-100271.avif" alt="Freezers with Food">
+                <img src="frozen-food.avif" alt= "Freezers with Food">
             </div>
             <div>
                 <img src="OIP.webp" alt="Fruit Stacked">
@@ -243,6 +249,9 @@ if ($result && $result->num_rows > 0) {
             </div>
             <div>
                 <img src="produce-vegetables.jpg" alt="Fresh Produce">
+            </div>
+            <div>
+                <img src="pantry-stuff.webp" alt="Jars and Juices on Shelves">
             </div>
         </div>
 

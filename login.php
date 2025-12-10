@@ -83,7 +83,7 @@ if (isset($_POST['register'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Pantry Pilot - Login / Register</title>
+    <title>Login/Register - Pantry Pilot</title>
     <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
 
     <!-- Slick slider CSS (same as index header) -->
@@ -95,14 +95,14 @@ if (isset($_POST['register'])) {
             margin: 0;
             padding: 0;
             font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #fff9ebff;
             color: #222;
         }
 
         /* ---------- HEADER & TOP NAV (MATCHES INDEX HEADER) ---------- */
         .header-container {
             background-color: #ffcf33;
-            border-bottom: 10px solid #ffcf33;
+            border-bottom: 8px solid #ffcf33;
             position: relative;
             overflow: hidden;
         }
@@ -136,11 +136,12 @@ if (isset($_POST['register'])) {
             text-decoration: underline;
         }
 
+
         /* Rotating header background (same as index.php) */
         header {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 400px;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -178,6 +179,11 @@ if (isset($_POST['register'])) {
             z-index: 2;
             height: 190px;
             object-fit: contain;
+        }
+
+        /* This enlarges the logo when the pointer is on it */
+        header :hover img {
+            transform: scale(1.08);
         }
 
         header a {
@@ -259,8 +265,8 @@ if (isset($_POST['register'])) {
             <a href="grocery.php">Shopping List</a>
         </div>
         <div class="nav-right">
-            <a href="AccountInfo.php">Account Info</a>
-            <a href="login.php">Login</a>
+            <a href="AccountInfo.php"> Account Info</a>
+            <a href="login.php", style="color: #145214; text-decoration: underline;">Login</a>
         </div>
     </div>
 
@@ -271,7 +277,7 @@ if (isset($_POST['register'])) {
                 <img src="pasta.jpg" alt="Jars of Pasta">
             </div>
             <div>
-                <img src="frozen-foods-displayed-supermarket-freezer-section_641503-100271.avif" alt="Freezers with Food">
+                <img src="frozen-food.avif" alt= "Freezers with Food">
             </div>
             <div>
                 <img src="OIP.webp" alt="Fruit Stacked">
@@ -281,6 +287,9 @@ if (isset($_POST['register'])) {
             </div>
             <div>
                 <img src="produce-vegetables.jpg" alt="Fresh Produce">
+            </div>
+            <div>
+                <img src="pantry-stuff.webp" alt="Jars and Juices on Shelves">
             </div>
         </div>
 
