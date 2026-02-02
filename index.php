@@ -208,6 +208,28 @@ header :hover img {
         body, h2, th, td, p {
             font-style: italic;
         }
+
+        /*----Footer Section--------*/
+
+        footer  {
+            height: 400px;
+            width: 100%;
+            margin: 40px auto;
+            background-color: orange;
+             position: relative;
+             width: 100%;
+             height: 400px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+
+
+
+
     </style>
 </head>
 <body>
@@ -326,6 +348,11 @@ header :hover img {
         </div>
     </section>
 
+
+    <footer>
+        <h1>Test</h1>
+
+    </footer>
 </main>
 
 <!-- Slick slider JS -->
