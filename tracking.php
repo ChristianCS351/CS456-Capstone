@@ -214,7 +214,8 @@ $pantry_items = $stmt->fetchAll();
         }
 
         .pantry-section,
-        .form-section {
+        .form-section, 
+        .option-section{
             background-color: #ffffff;
             border-radius: 12px;
             padding: 25px;
@@ -227,7 +228,8 @@ $pantry_items = $stmt->fetchAll();
         }
 
         .pantry-section h2,
-        .form-section h2 {
+        .form-section h2,
+        .option-section h2{
             color: #1b5e20;
             text-align: center;
             border-bottom: 3px solid #ffcf33;
@@ -441,6 +443,19 @@ $pantry_items = $stmt->fetchAll();
             <button type="button" class="scan-btn">SCAN</button>
         </div>
     </div>
+
+    <div class="option-section">
+        <h2>ALTER ADD ITEM OPTIONS</h2>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="expiration" class="submit-btn">EXPIRATION</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="location" class="submit-btn">LOCATION</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="category" class="submit-btn">CATEGORY</button>
+            </div>
+    <div>
 </div>
 
 <!-- Slick slider JS (same as index) -->
