@@ -61,176 +61,8 @@ $groceryItems = $groceryStmt->fetchAll();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #fff9ebff;
-            color: #222;
-        }
-
-        .header-container {
-            background-color: #ffcf33;
-            border-bottom: 8px solid #ffcf33;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ---------- TOP NAVIGATION ---------- */
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 25px;
-            background-color: #ffcf33;
-        }
-
-        .top-nav .nav-left a,
-        .top-nav .nav-right a {
-            margin-right: 20px;
-            color: #1b5e20;
-            font-style: italic;
-            font-size: 17px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.2s ease, text-decoration 0.2s ease;
-            cursor: pointer;
-        }
-
-        .top-nav .nav-right a:last-child {
-            margin-right: 0;
-        }
-
-        .top-nav a:hover {
-            color: #145214;
-            text-decoration: underline;
-        }
-
-        /* ---------- HEADER WITH ROTATING BACKGROUND ---------- */
-        header {
-    position: relative;
-    width: 100%;
-    height: 400px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Make slider fill FULL width + height */
-.hero-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-
-.hero-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Make overlay LESS transparent (stronger white layer) */
-header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255,255,255,0.30);   /* was 0.55 – now stronger */
-    z-index: 1;
-}
-
-/* Logo stays above overlay */
-header img {
-    position: relative;
-    z-index: 2;
-    height: 190px;
-    object-fit: contain;
-}
-
-/* This enlarges the logo when the pointer is on it */
-header :hover img {
-    transform: scale(1.08);
-}
-
-        /* ---------- MAIN CONTENT ---------- */
-        main {
-            margin: 40px auto;
-            max-width: 1000px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 30px 40px 45px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-        }
-
-        h2 {
-            color: #1b5e20;
-            text-align: center;
-            border-bottom: 3px solid #ffcf33;
-            padding-bottom: 8px;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th {
-            background-color: #1b5e20;
-            color: white;
-            padding: 12px;
-            text-align: left;
-            font-size: 17px;
-        }
-
-        td {
-            background-color: #f7f7f7;
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr:hover td {
-            background-color: #e8f5e9;
-        }
-
-        section {
-            margin-bottom: 50px;
-        }
-
-        body, h2, th, td, p {
-            font-style: italic;
-        }
-
-        /*----Footer Section--------*/
-
-        footer  {
-            height: 400px;
-            width: 100%;
-            margin: 40px auto;
-            background-color: orange;
-             position: relative;
-             width: 100%;
-             height: 400px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-        }
-
-
-
-
-
-    </style>
+    
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
@@ -348,11 +180,6 @@ header :hover img {
         </div>
     </section>
 
-
-    <footer>
-        <h1>Test</h1>
-
-    </footer>
 </main>
 
 <!-- Slick slider JS -->
@@ -360,21 +187,6 @@ header :hover img {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
-$(document).ready(function(){
-    $('.hero-slide').slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        infinite: true,
-        autoplaySpeed: 5600,
-        arrows: false,
-        speed: 3800,
-        fade: true,
-        cssEase: 'linear'
-    });
-});
-</script>
-
+    <script src="app.js"></script>
 </body>
 </html>

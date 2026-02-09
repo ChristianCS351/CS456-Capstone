@@ -1,5 +1,4 @@
-/* ---------- HEADER / GLOBAL (MATCH TRACKING/INDEX) ---------- */
-        body {
+body {
             margin: 0;
             padding: 0;
             font-family: "Segoe UI", Arial, sans-serif;
@@ -14,7 +13,7 @@
             overflow: hidden;
         }
 
-        /* TOP NAV EXACTLY LIKE OTHER PAGES */
+        /* ---------- TOP NAVIGATION (EXACTLY LIKE INDEX) ---------- */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -44,7 +43,7 @@
             text-decoration: underline;
         }
 
-        /* ---------- HEADER WITH ROTATING BACKGROUND (EXACTLY LIKE INDEX) ---------- */
+        /* ---------- HEADER WITH ROTATING BACKGROUND (COPY FROM INDEX) ---------- */
         header {
             position: relative;
             width: 100%;
@@ -93,11 +92,7 @@
             transform: scale(1.08);
         }
 
-        header a {
-            display: inline-block;
-        }
-
-        /* ---------- MAIN LAYOUT ---------- */
+        /* ---------- TRACKING PAGE LAYOUT ---------- */
         .main-content {
             max-width: 1100px;
             margin: 40px auto;
@@ -106,50 +101,43 @@
             gap: 30px;
         }
 
-        .grocery-section {
-            flex: 1.2;
+        .pantry-section,
+        .form-section {
             background-color: #ffffff;
             border-radius: 12px;
             padding: 25px;
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-        }
-
-        .add-section {
             flex: 1;
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
         }
 
-        .grocery-section h2,
-        .add-section h2 {
-            text-align: center;
+        .pantry-section {
+            flex: 1.2;
+        }
+
+        .pantry-section h2,
+        .form-section h2 {
             color: #1b5e20;
-            margin-bottom: 15px;
+            text-align: center;
             border-bottom: 3px solid #ffcf33;
             padding-bottom: 8px;
+            margin-bottom: 20px;
         }
 
-        /* ---------- TABLE ---------- */
         table {
-            border-collapse: collapse;
             width: 100%;
-            text-align: center;
-        }
-
-        th, td {
-            border-bottom: 1px solid #ddd;
-            padding: 10px;
+            border-collapse: collapse;
         }
 
         th {
             background-color: #1b5e20;
             color: white;
-            font-weight: bold;
+            padding: 10px;
+            text-align: left;
         }
 
-        tr:nth-child(even) td {
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
             background-color: #f7f7f7;
         }
 
@@ -157,95 +145,70 @@
             background-color: #e8f5e9;
         }
 
-        /* ---------- BUTTONS ---------- */
-        .action-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
+        .delete-btn, .shop-btn {
+            border: none;
+            padding: 6px 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            color: white;
+            border-radius: 4px;
         }
 
-        .save-btn,
-        .print-btn,
-        .submit-btn,
-        .scan-btn {
+        .delete-btn {
+            background-color: #004b23;
+        }
+
+        .delete-btn:hover {
+            background-color: #003017;
+        }
+
+        .shop-btn {
+            background-color: #e5b600;
+            color: #004b23;
+        }
+
+        .shop-btn:hover {
+            background-color: #cfa400;
+        }
+
+        .form-section label {
+            display: block;
+            margin: 10px 0 4px;
+            font-weight: 600;
+        }
+
+        .form-section input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border: 1px solid #bbb;
+        }
+
+        .submit-btn, .scan-btn {
             display: inline-block;
             background-color: #e5b600;
             color: #004b23;
             border: 2px solid #004b23;
             font-weight: bold;
-            padding: 8px 18px;
+            padding: 10px 25px;
             cursor: pointer;
             transition: 0.2s;
             text-align: center;
             border-radius: 8px;
         }
 
-        .save-btn:hover,
-        .print-btn:hover,
-        .submit-btn:hover,
-        .scan-btn:hover {
+        .submit-btn:hover, .scan-btn:hover {
             background-color: #004b23;
-            color: white;
-        }
-
-        /* ---------- FORM ---------- */
-        .add-section label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: 600;
-        }
-
-        .add-section input {
-            width: 100%;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #bbb;
-            margin-bottom: 8px;
-        }
-
-        .submit-wrapper {
-            text-align: center;
-            margin-top: 10px;
+            color: #ffffff;
         }
 
         .scan-section {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 25px;
         }
 
         .scan-section h3 {
             color: #004b23;
-            font-style: italic;
-        }
-
-        .success {
-            margin-top: 10px;
-            color: #004b23;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        /* ===== PRINT ONLY SHOPPING LIST ===== */
-        @media print {
-            body * {
-                visibility: hidden !important;
-            }
-
-            #print_area, #print_area * {
-                visibility: visible !important;
-            }
-
-            #print_area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                background: #fff;
-                padding: 20px;
-            }
-
-            /* hide buttons/nav/header during print */
-            .action-buttons { display: none !important; }
-            .header-container { display: none !important; }
-            .add-section { display: none !important; }
         }
