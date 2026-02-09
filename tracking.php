@@ -215,7 +215,8 @@ $pantry_items = $stmt->fetchAll();
 
         .pantry-section,
         .form-section, 
-        .option-section{
+        .option-section,
+        .pantry-options{
             background-color: #ffffff;
             border-radius: 12px;
             padding: 25px;
@@ -229,7 +230,8 @@ $pantry_items = $stmt->fetchAll();
 
         .pantry-section h2,
         .form-section h2,
-        .option-section h2{
+        .option-section h2,
+        .pantry-options h2{
             color: #1b5e20;
             text-align: center;
             border-bottom: 3px solid #ffcf33;
@@ -376,6 +378,34 @@ $pantry_items = $stmt->fetchAll();
 </div>
 
 <div class="main-content">
+
+    <div class="pantry-options">
+        <h2>HOW TO SORT PANTRY</h2>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="expiration" class="submit-btn">NAME (A-Z)</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="location" class="submit-btn">QTY (High, Low)</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="category" class="submit-btn">QTY (Low, High)</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="expiration" class="submit-btn">EXPIRATION (Most Recent)</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="location" class="submit-btn">EXPIRATION (Least Recent)</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="category" class="submit-btn">LOCATION (A-Z)</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="category" class="submit-btn">ACTIONS (A-Z)</button>
+            </div>
+            <div style="text-align:center; margin-top:50px;">
+                <button type="submit" name="category" class="submit-btn">WHEN ADDED (DEFAULT)</button>
+            </div>
+    <div>
 
     <div class="pantry-section">
         <h2>MY PANTRY</h2>
