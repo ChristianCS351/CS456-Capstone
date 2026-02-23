@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+//prevents access if not logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 $host = "localhost";
 $user = "root";
 $pass = "mysql";
@@ -328,8 +334,7 @@ if ($result) {
             <a href="grocery.php", style="color: #145214; text-decoration: underline;">Shopping List</a>
         </div>
         <div class="nav-right">
-            <a href="AccountInfo.php">Account Info</a>
-            <a href="login.php">Login</a>
+            <a href="AccountInfo.php">Account Info / Logout</a>
         </div>
     </div>
 
