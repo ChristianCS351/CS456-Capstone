@@ -3,7 +3,7 @@ session_start();
 
 // Prevent access if not logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login_register.php");
+    header("Location: login.php");
     exit;
 }
 
@@ -368,8 +368,7 @@ if ($result2 && $result2->num_rows > 0) {
             <a href="grocery.php">Shopping List</a>
         </div>
         <div class="nav-right">
-            <a href="AccountInfo.php">Account Info</a>
-            <a href="login.php">Login</a>
+            <a href="AccountInfo.php">Account Info / Logout</a>
         </div>
     </div>
 
