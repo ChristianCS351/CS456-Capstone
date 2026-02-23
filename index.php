@@ -61,103 +61,7 @@ $groceryItems = $groceryStmt->fetchAll();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #fff9ebff;
-            color: #222;
-        }
-
-        .header-container {
-            background-color: #ffcf33;
-            border-bottom: 8px solid #ffcf33;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* ---------- TOP NAVIGATION ---------- */
-        .top-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 25px;
-            background-color: #ffcf33;
-        }
-
-        .top-nav .nav-left a,
-        .top-nav .nav-right a {
-            margin-right: 20px;
-            color: #1b5e20;
-            font-style: italic;
-            font-size: 17px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: color 0.2s ease, text-decoration 0.2s ease;
-            cursor: pointer;
-        }
-
-        .top-nav .nav-right a:last-child {
-            margin-right: 0;
-        }
-
-        .top-nav a:hover {
-            color: #145214;
-            text-decoration: underline;
-        }
-
-        /* ---------- HEADER WITH ROTATING BACKGROUND ---------- */
-        header {
-    position: relative;
-    width: 100%;
-    height: 400px;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Make slider fill FULL width + height */
-.hero-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-}
-
-.hero-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Make overlay LESS transparent (stronger white layer) */
-header::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255,255,255,0.30);   /* was 0.55 – now stronger */
-    z-index: 1;
-}
-
-/* Logo stays above overlay */
-header img {
-    position: relative;
-    z-index: 2;
-    height: 190px;
-    object-fit: contain;
-}
-
-/* This enlarges the logo when the pointer is on it */
-header :hover img {
-    transform: scale(1.08);
-}
+        <style>
 
         /* ---------- MAIN CONTENT ---------- */
         main {
@@ -215,11 +119,6 @@ header :hover img {
            
 
         }
-
-
-
-
-
     </style>
     
     <link rel="stylesheet" href="index.css">

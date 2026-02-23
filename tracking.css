@@ -115,7 +115,9 @@ body {
         }
 
         .pantry-section h2,
-        .form-section h2 {
+        .form-section h2,
+        .option-section h2,
+        .pantry-options h2{
             color: #1b5e20;
             text-align: center;
             border-bottom: 3px solid #ffcf33;
