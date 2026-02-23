@@ -240,8 +240,7 @@ header :hover img {
             <a href="grocery.php">Shopping List</a>
         </div>
         <div class="nav-right">
-            <a href="AccountInfo.php">Account Info</a>
-            <a href="login.php">Login</a>
+            <a href="AccountInfo.php">Account Info / Logout</a>
         </div>
     </div>
 
