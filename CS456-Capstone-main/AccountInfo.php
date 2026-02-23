@@ -3,7 +3,7 @@ session_start();
 
 // Prevent access if not logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login_register.php");
+    header("Location: login.php");
     exit;
 }
 
@@ -26,8 +26,7 @@ $expiringItems = [];
 
 $sql = "SELECT name, expiration_date
         FROM `$pantryTable`
-        WHERE expiration_date >= CURDATE()
-          AND expiration_date <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+        WHERE expiration_date <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
         ORDER BY expiration_date ASC";
 
 $result = $conn->query($sql);
@@ -226,8 +225,7 @@ if ($result && $result->num_rows > 0) {
             <a href="grocery.php">Shopping List</a>
         </div>
         <div class="nav-right">
-            <a href="AccountInfo.php", style="color: #145214; text-decoration: underline;">Account Info</a>
-            <a href="login.php">Login</a>
+            <a href="AccountInfo.php", style="color: #145214; text-decoration: underline;">Account Info / Logout</a>
         </div>
     </div>
 
@@ -274,7 +272,7 @@ if ($result && $result->num_rows > 0) {
                 <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($userInfo['phone']); ?></p>
             </div>
 
-            <a href="login.php">
+            <a href="logout.php">
                 <button class="logout-btn">Logout</button>
             </a>
         </div>
@@ -325,3 +323,4 @@ $(document).ready(function(){
 
 </body>
 </html>
+
