@@ -1,86 +1,96 @@
-// quagga_scanner.js
+// barcode_scanner.js
 
-let quagga_running = false;
+let scanner_running = false;
+let html5QrCode = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     const scan_btn = document.getElementById("scan_btn");
-    const scanner_box = document.getElementById("scanner");
-    const result_span = document.getElementById("result");
-    const error_p = document.getElementById("scan_error");
+    const reader = document.getElementById("reader");
+    const scan_result = document.getElementById("scan_result");
     const barcode_input = document.getElementById("barcode");
 
-    if (!scan_btn || !scanner_box || !result_span || !barcode_input) {
+    // just in case someone loads this JS on another page
+    if (!scan_btn || !reader || !scan_result || !barcode_input) {
         return;
     }
 
-    function start_quagga() {
-        error_p.textContent = "";
-        result_span.textContent = "";
-        scanner_box.style.display = "block";
-        scan_btn.textContent = "STOP";
+    scan_btn.addEventListener("click", async () => {
+        // If scanning, stop scanning
+        if (scanner_running && html5QrCode) {
+            try {
+                await html5QrCode.stop();
+                await html5QrCode.clear();
+            } catch (e) {
+                // ignore
+            }
 
-        Quagga.init({
-            inputStream: {
-                type: "LiveStream",
-                target: scanner_box,
-                constraints: {
-                    facingMode: "environment"
-                }
-            },
-            decoder: {
-                readers: ["upc_reader", "ean_reader", "code_128_reader"]
-            },
-            locate: true
-        }, function(err) {
-            if (err) {
-                console.error(err);
-                error_p.textContent = "Camera error: " + (err.message || err);
-                scanner_box.style.display = "none";
+            scanner_running = false;
+            reader.style.display = "none";
+            scan_btn.textContent = "SCAN";
+            scan_result.textContent = "";
+            return;
+        }
+
+        // Start scanning
+        reader.style.display = "block";
+        scan_btn.textContent = "STOP";
+        scan_result.textContent = "Opening camera...";
+
+        html5QrCode = new Html5Qrcode("reader");
+
+        try {
+            const cameras = await Html5Qrcode.getCameras();
+
+            if (!cameras || cameras.length === 0) {
+                scan_result.textContent = "No camera found on this device.";
                 scan_btn.textContent = "SCAN";
-                quagga_running = false;
+                reader.style.display = "none";
+                scanner_running = false;
                 return;
             }
 
-            Quagga.start();
-            quagga_running = true;
-        });
-    }
+            // Prefer "back" camera when possible (usually last on phones)
+            const cam_id = cameras[cameras.length - 1].id;
 
-    function stop_quagga() {
-        try {
-            Quagga.stop();
-        } catch (e) {
-            // ignore
-        }
+            scanner_running = true;
 
-        quagga_running = false;
-        scanner_box.style.display = "none";
-        scan_btn.textContent = "SCAN";
-    }
+            await html5QrCode.start(
+                cam_id,
+                { fps: 10, qrbox: { width: 250, height: 250 } },
+                async (decodedText) => {
+                    // When something scans successfully
+                    scan_result.textContent = "Scanned: " + decodedText;
 
-    // When a barcode is detected
-    Quagga.onDetected((data) => {
-        const code = data?.codeResult?.code;
-        if (!code) return;
+                    // Put it into your hidden field so it saves to DB when you submit
+                    barcode_input.value = decodedText;
 
-        // prevent rapid double-fires
-        if (result_span.textContent === code) return;
+                    // Stop after successful scan
+                    try {
+                        await html5QrCode.stop();
+                        await html5QrCode.clear();
+                    } catch (e) {
+                        // ignore
+                    }
 
-        result_span.textContent = code;
-        barcode_input.value = code;
+                    scanner_running = false;
+                    reader.style.display = "none";
+                    scan_btn.textContent = "SCAN";
 
-        // OPTIONAL: stop after first successful scan
-        stop_quagga();
+                    // OPTIONAL: auto-submit form after scan
+                    // document.getElementById("add_item_form").submit();
+                },
+                () => {
+                    // scan errors happen constantly while it’s trying to detect
+                    // leave blank so console doesn't get spammed
+                }
+            );
 
-        // OPTIONAL: auto-submit after scan
-        // document.getElementById("add_item_form").submit();
-    });
-
-    scan_btn.addEventListener("click", () => {
-        if (quagga_running) {
-            stop_quagga();
-        } else {
-            start_quagga();
+            scan_result.textContent = "Point camera at barcode...";
+        } catch (err) {
+            scan_result.textContent = "Camera error: " + err;
+            scan_btn.textContent = "SCAN";
+            reader.style.display = "none";
+            scanner_running = false;
         }
     });
 });

@@ -221,6 +221,8 @@ header :hover img {
 
 
     </style>
+    
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
@@ -338,11 +340,6 @@ header :hover img {
         </div>
     </section>
 
-
-    <footer>
-        <h1>Test</h1>
-
-    </footer>
 </main>
 
 <!-- Slick slider JS -->
@@ -350,21 +347,6 @@ header :hover img {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
-$(document).ready(function(){
-    $('.hero-slide').slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        infinite: true,
-        autoplaySpeed: 5600,
-        arrows: false,
-        speed: 3800,
-        fade: true,
-        cssEase: 'linear'
-    });
-});
-</script>
-
+    <script src="app.js"></script>
 </body>
 </html>

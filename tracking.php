@@ -59,7 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shop_id'])) {
     exit;
 }
 
-
 /* ------------------ INSERT NEW ITEM ------------------ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
     $name = trim($_POST['name']);
@@ -67,6 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
     $location = trim($_POST['location']);
     $dairy = trim($_POST['dairy']);
     $quantity = (int)$_POST['quantity'];
+
+    // NEW: barcode coming from scanner (hidden input)
+    $barcode = isset($_POST['barcode']) ? trim($_POST['barcode']) : null;
+    if ($barcode === '') { $barcode = null; }
 
     if (empty($name) || empty($expiration_date) || empty($location) || $quantity <= 0) {
         echo "<script>alert('Please fill in all required fields correctly before submitting.');</script>";
@@ -84,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
             ':dairy' => $dairy,
             ':open_date' => $today,
             ':open_expiration_date' => date('Y-m-d', strtotime('+1 year')),
-            ':barcode' => null
+            ':barcode' => $barcode
         ]);
 
         header("Location: " . $_SERVER['PHP_SELF']);
@@ -102,7 +105,6 @@ $pantry_items = $stmt->fetchAll();
     <meta charset="UTF-8">
     <title>Pantry - Pantry Pilot</title>
     <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
-
 
     <!-- Slick slider CSS (same as index header) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -329,6 +331,8 @@ $pantry_items = $stmt->fetchAll();
             color: #004b23;
         }
     </style>
+    
+    <link rel="stylesheet" href="tracking.css">
 </head>
 <body>
 
@@ -348,7 +352,6 @@ $pantry_items = $stmt->fetchAll();
     </div>
 
     <!-- ROTATING HEADER (copied from index) -->
-
     <header>
         <div class="hero-slide">
             <div>
@@ -447,7 +450,7 @@ $pantry_items = $stmt->fetchAll();
 
     <div class="form-section">
         <h2>ADD AN ITEM</h2>
-        <form method="POST" action="">
+        <form method="POST" action="" id="add_item_form">
             <label>Name:</label>
             <input type="text" name="name" required>
 
@@ -463,6 +466,9 @@ $pantry_items = $stmt->fetchAll();
             <label>QTY:</label>
             <input type="number" name="quantity" min="1" required>
 
+            <!-- NEW: barcode from scanner (hidden) -->
+            <input type="hidden" name="barcode" id="barcode">
+
             <div style="text-align:center; margin-top:10px;">
                 <button type="submit" name="add_item" class="submit-btn">SUBMIT</button>
             </div>
@@ -470,7 +476,12 @@ $pantry_items = $stmt->fetchAll();
 
         <div class="scan-section">
             <h3>OR SCAN BARCODE</h3>
-            <button type="button" class="scan-btn">SCAN</button>
+
+            <button type="button" class="scan-btn" id="scan_btn">SCAN</button>
+
+            <div id="reader" style="width:100%; max-width:420px; margin:15px auto; display:none;"></div>
+
+            <p id="scan_result" style="font-weight:600; color:#004b23;"></p>
         </div>
     </div>
 
@@ -493,21 +504,12 @@ $pantry_items = $stmt->fetchAll();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script>
-$(document).ready(function(){
-    $('.hero-slide').slick({
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        infinite: true,
-        autoplaySpeed: 5600,
-        arrows: false,
-        speed: 3800,
-        fade: true,
-        cssEase: 'linear'
-    });
-});
-</script>
+<!-- Barcode library -->
+<script src="https://unpkg.com/html5-qrcode"></script>
 
+<!-- Your separate JS file -->
+<script src="barcode_scanner.js"></script>
+
+    <script src="app.js"></script>
 </body>
 </html>
