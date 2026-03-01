@@ -1,6 +1,13 @@
 <?php 
 session_start();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_unset();    
+    session_destroy();   
+    header("Location: login.php");
+    exit;
+}
+
 // Prevent access if not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login_register.php");
@@ -112,9 +119,9 @@ if ($result && $result->num_rows > 0) {
                 <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($userInfo['phone']); ?></p>
             </div>
 
-            <a href="login.php">
-                <button class="logout-btn">Logout</button>
-            </a>
+                <form method="POST" id="clear_form">
+                    <button type="button" class="logout-btn" onclick=handleOut()>Logout</button>
+                </form>
         </div>
 
         <!-- pantry items that are about to expire -->
@@ -146,5 +153,7 @@ if ($result && $result->num_rows > 0) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="app.js"></script>
+    <script src="account.js"></script>
+
 </body>
 </html>

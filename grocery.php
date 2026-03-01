@@ -144,6 +144,7 @@ if ($result) {
 
             <div class="submit-wrapper">
                 <button type="submit" name="list" class="submit-btn">SUBMIT</button>
+                <button type="reset" class="reset-btn">RESET</button>
             </div>
 
             <input type="hidden" name="barcode" id="barcode">

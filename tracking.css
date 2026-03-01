@@ -94,7 +94,7 @@ body {
 
         /* ---------- TRACKING PAGE LAYOUT ---------- */
         .main-content {
-            max-width: 1100px;
+            max-width: 1800px;
             margin: 40px auto;
             display: flex;
             justify-content: space-between;
@@ -102,7 +102,9 @@ body {
         }
 
         .pantry-section,
-        .form-section {
+        .form-section,
+        .option-section,
+        .pantry-options {
             background-color: #ffffff;
             border-radius: 12px;
             padding: 25px;
@@ -134,12 +136,14 @@ body {
             background-color: #1b5e20;
             color: white;
             padding: 10px;
-            text-align: left;
+            border-right: 1px solid #a7b4a4;
+            text-align: center;
         }
 
         td {
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
             background-color: #f7f7f7;
         }
 
@@ -188,7 +192,7 @@ body {
             border: 1px solid #bbb;
         }
 
-        .submit-btn, .scan-btn {
+        .submit-btn, .reset-btn {
             display: inline-block;
             background-color: #e5b600;
             color: #004b23;
@@ -197,11 +201,53 @@ body {
             padding: 10px 25px;
             cursor: pointer;
             transition: 0.2s;
+            margin-left: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+          .scan-btn {
+            display: inline-block;
+            background-color: #2fa6d2;
+            color: #204860;
+            border: 2px solid #204860;
+            font-weight: bold;
+            gap: 50px;
+            margin-left: 20px;
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: 0.2s;
             text-align: center;
             border-radius: 8px;
         }
 
-        .submit-btn:hover, .scan-btn:hover {
+        .cookie-btn {
+            display: inline-block;
+            background-color: #bcb48e;
+            color: #000000;
+            border: 2px solid #000000;
+            font-weight: bold;
+            gap: 50px;
+            margin-left: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .cookie-btn:hover {
+            background-color: #363528;
+            color: #ffffff;
+        }
+
+        .scan-btn:hover {
+            background-color: #204860;
+            color: #ffffff;
+        }
+
+
+
+        .submit-btn:hover, .reset-btn:hover {
             background-color: #004b23;
             color: #ffffff;
         }
@@ -214,3 +260,8 @@ body {
         .scan-section h3 {
             color: #004b23;
         }
+
+
+
+
+      

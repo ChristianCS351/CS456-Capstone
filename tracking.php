@@ -109,6 +109,7 @@ $pantry_items = $stmt->fetchAll();
     <!-- Slick slider CSS (same as index header) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     
     <link rel="stylesheet" href="tracking.css">
 </head>
@@ -162,41 +163,41 @@ $pantry_items = $stmt->fetchAll();
 
     <div class="pantry-options">
         <h2>HOW TO SORT PANTRY</h2>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="expiration" class="submit-btn">NAME (A-Z)</button>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="expiration" class="cookie-btn">NAME (A-Z)</button>
             </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="location" class="submit-btn">QTY (High, Low)</button>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="location" class="cookie-btn">QTY (High, Low)</button>
             </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="category" class="submit-btn">QTY (Low, High)</button>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="category" class="cookie-btn">QTY (Low, High)</button>
             </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="expiration" class="submit-btn">EXPIRATION (Most Recent)</button>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="expiration" class="cookie-btn">EXPIRATION (Most Recent)</button>
             </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="location" class="submit-btn">EXPIRATION (Least Recent)</button>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="location" class="cookie-btn">EXPIRATION (Least Recent)</button>
             </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="category" class="submit-btn">LOCATION (A-Z)</button>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="category" class="cookie-btn">LOCATION (A-Z)</button>
             </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="category" class="submit-btn">ACTIONS (A-Z)</button>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="category" class="cookie-btn">ACTIONS (A-Z)</button>
             </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="category" class="submit-btn">WHEN ADDED (DEFAULT)</button>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="category" class="cookie-btn">WHEN ADDED (DEFAULT)</button>
             </div>
-    <div>
+    </div>
 
     <div class="pantry-section">
         <h2>MY PANTRY</h2>
         <table>
             <tr>
                 <th>Name</th>
-                <th>QTY</th>
-                <th>Expiration</th>
+                <th>Expiration Date</th>
                 <th>Location</th>
-                <th colspan="2">Actions</th>
+                <th>Food Category</th>
+                <th>Quantity</th>
             </tr>
 
             <?php if (!empty($pantry_items)): ?>
@@ -238,8 +239,8 @@ $pantry_items = $stmt->fetchAll();
             <label>Location:</label>
             <input type="text" name="location" required>
 
-            <label>Category:</label>
-            <input type="text" name="dairy">
+            <label>Food Category:</label>
+            <input type="text" id="fruit" name="dairy" required>
 
             <label>QTY:</label>
             <input type="number" name="quantity" min="1" required>
@@ -249,6 +250,7 @@ $pantry_items = $stmt->fetchAll();
 
             <div style="text-align:center; margin-top:10px;">
                 <button type="submit" name="add_item" class="submit-btn">SUBMIT</button>
+                <button type="reset" class="reset-btn">RESET</button>
             </div>
         </form>
 
@@ -260,21 +262,9 @@ $pantry_items = $stmt->fetchAll();
             <div id="reader" style="width:100%; max-width:420px; margin:15px auto; display:none;"></div>
 
             <p id="scan_result" style="font-weight:600; color:#004b23;"></p>
+            </div>
         </div>
-    </div>
-
-    <div class="option-section">
-        <h2>ALTER ADD ITEM OPTIONS</h2>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="expiration" class="submit-btn">EXPIRATION</button>
-            </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="location" class="submit-btn">LOCATION</button>
-            </div>
-            <div style="text-align:center; margin-top:50px;">
-                <button type="submit" name="category" class="submit-btn">CATEGORY</button>
-            </div>
-    <div>
+    
 </div>
 
 <!-- Slick slider JS (same as index) -->

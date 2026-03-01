@@ -123,14 +123,27 @@ header :hover img {
             background-color: #1b5e20;
             color: white;
             padding: 12px;
-            text-align: left;
+            text-align: center;
             font-size: 17px;
+            border-right: 1px solid #a7b4a4;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 17px;
+            font-weight: bold;
         }
 
         td {
-            background-color: #f7f7f7;
+            background-color: #ffffff;
             padding: 12px;
             border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 17px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+         tr:nth-child(even) td {
+            background-color: #f7f7f7;
         }
 
         tr:hover td {
