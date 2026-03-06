@@ -68,9 +68,9 @@ if (isset($_POST['register'])) {
 
         $createSql = "CREATE TABLE $pantryTable LIKE foods";
         if ($conn->query($createSql) === TRUE) {
-            $messageRegister = "Account created and pantry is ready! Log in to begin.";
+            $messageRegister = "Your Account was created :D. Log in and pantry my friend!";
         } else {
-            $messageRegister = "User created, but error creating pantry: " . $conn->error;
+            $messageRegister = "User created, but error creating pantry :( " . $conn->error;
         }
     } else {
         $messageRegister = "Error: Username may already exist.";

@@ -180,6 +180,7 @@ $pantry_items = $stmt->fetchAll();
                 </div>
             </section>
 
+<<<<<<< HEAD
             <!-- Right: Add Item & Scanner -->
             <aside class="sidebar-section">
                 <!-- Add Item Form -->
@@ -213,6 +214,46 @@ $pantry_items = $stmt->fetchAll();
                                 <input type="number" name="quantity" min="1" required value="1">
                             </div>
                         </div>
+=======
+    <div class="pantry-options">
+        <h2>HOW TO SORT PANTRY</h2>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="expiration" class="cookie-btn">NAME (A-Z)</button>
+            </div>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="location" class="cookie-btn">QTY (High, Low)</button>
+            </div>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="category" class="cookie-btn">QTY (Low, High)</button>
+            </div>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="expiration" class="cookie-btn">EXPIRATION (Most Recent)</button>
+            </div>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="location" class="cookie-btn">EXPIRATION (Least Recent)</button>
+            </div>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="category" class="cookie-btn">LOCATION (A-Z)</button>
+            </div>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="category" class="cookie-btn">ACTIONS (A-Z)</button>
+            </div>
+            <div style="text-align:center; margin-top:35px;">
+                <button type="submit" name="category" class="cookie-btn">WHEN ADDED (DEFAULT)</button>
+            </div>
+    </div>
+
+    <div class="pantry-section">
+        <h2>MY PANTRY</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Expiration Date</th>
+                <th>Location</th>
+                <th>Food Category</th>
+                <th>Quantity</th>
+            </tr>
+>>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
                         <input type="hidden" name="barcode" id="barcode">
                         
@@ -222,6 +263,7 @@ $pantry_items = $stmt->fetchAll();
                     </form>
                 </div>
 
+<<<<<<< HEAD
                 <!-- Barcode Scanner -->
                 <div class="scan-section card-modern mt-4">
                     <div class="card-header">
@@ -237,6 +279,47 @@ $pantry_items = $stmt->fetchAll();
             </aside>
         </div>
     </main>
+=======
+    <div class="form-section">
+        <h2>ADD AN ITEM</h2>
+        <form method="POST" action="" id="add_item_form">
+            <label>Name:</label>
+            <input type="text" name="name" required>
+
+            <label>Expiration:</label>
+            <input type="date" name="expiration_date" required>
+
+            <label>Location:</label>
+            <input type="text" name="location" required>
+
+            <label>Food Category:</label>
+            <input type="text" id="fruit" name="dairy" required>
+
+            <label>QTY:</label>
+            <input type="number" name="quantity" min="1" required>
+
+            <!-- NEW: barcode from scanner (hidden) -->
+            <input type="hidden" name="barcode" id="barcode">
+
+            <div style="text-align:center; margin-top:10px;">
+                <button type="submit" name="add_item" class="submit-btn">SUBMIT</button>
+                <button type="reset" class="reset-btn">RESET</button>
+            </div>
+        </form>
+
+        <div class="scan-section">
+            <h3>OR SCAN BARCODE</h3>
+
+            <button type="button" class="scan-btn" id="scan_btn">SCAN</button>
+
+            <div id="reader" style="width:100%; max-width:420px; margin:15px auto; display:none;"></div>
+
+            <p id="scan_result" style="font-weight:600; color:#004b23;"></p>
+            </div>
+        </div>
+    
+</div>
+>>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
     <!-- Footer -->
     <footer>

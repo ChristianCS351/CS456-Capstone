@@ -162,6 +162,7 @@ body {
     z-index: 10;
 }
 
+<<<<<<< HEAD
 .split-layout {
     display: flex;
     gap: 30px;
@@ -171,6 +172,23 @@ body {
 .grocery-section {
     flex: 1.5;
 }
+=======
+        th, td {
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            padding: 10px;
+            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        th {
+            background-color: #1b5e20;
+            color: white;
+            border-right: 1px solid #a7b4a4;
+            font-weight: bold;
+        }
+>>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
 .sidebar-section {
     flex: 1;
@@ -187,6 +205,7 @@ body {
     }
 }
 
+<<<<<<< HEAD
 /* =========== MODERN CARDS =========== */
 .card-modern {
     background: var(--surface);
@@ -202,6 +221,52 @@ body {
     border-bottom: 1px solid var(--border-color);
     background: rgba(27, 94, 32, 0.02);
 }
+=======
+         .scan-btn {
+            display: inline-block;
+            background-color: #2fa6d2;
+            color: #204860;
+            border: 2px solid #204860;
+            font-weight: bold;
+            gap: 50px;
+            padding: 10px 25px;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .scan-btn:hover {
+            background-color: #204860;
+            color: #ffffff;
+        }
+
+        .save-btn,
+        .print-btn,
+        .submit-btn,
+        .reset-btn {
+            display: inline-block;
+            background-color: #e5b600;
+            color: #004b23;
+            border: 2px solid #004b23;
+            font-weight: bold;
+            padding: 10px 25px;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .save-btn:hover,
+        .print-btn:hover,
+        .submit-btn:hover,
+        .reset-btn:hover {
+            background-color: #004b23;
+            color: white;
+        }
+>>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
 .card-header h2 {
     font-size: 1.4rem;

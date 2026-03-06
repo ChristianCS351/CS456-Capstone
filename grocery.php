@@ -68,6 +68,7 @@ if ($result) {
 </head>
 <body class="grocery-page">
 
+<<<<<<< HEAD
     <!-- Top Navigation -->
     <nav class="top-nav">
         <div class="nav-container">
@@ -83,6 +84,85 @@ if ($result) {
             <div class="nav-right">
                 <a href="AccountInfo.php">Account Info</a>
                 <a href="login.php" class="btn-login">Login</a>
+=======
+<div class="header-container">
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="index.php">Home</a>
+            <a href="tracking.php">Pantry</a>
+            <a href="grocery.php", style="color: #145214; text-decoration: underline;">Shopping List</a>
+        </div>
+        <div class="nav-right">
+            <a href="AccountInfo.php">Account Info</a>
+            <a href="login.php">Login</a>
+        </div>
+    </div>
+
+    <header>
+        <!-- Rotating background images (same order as index) -->
+        <div class="hero-slide">
+            <div><img src="pasta.jpg" alt="Jars of Pasta"></div>
+            <div><img src="frozen-food.avif" alt="Freezers with Food"></div>
+            <div><img src="OIP.webp" alt="Fruit Stacked"></div>
+            <div><img src="00-FOOD-PANTRIES-CLOSING-SAVEUR.webp" alt="Various Pantry Foods"></div>
+            <div><img src="produce-vegetables.jpg" alt="Fresh Produce"></div>
+            <div><img src="pantry-stuff.webp" alt="Jars and Juices on Shelves"></div>
+        </div>
+
+        <!-- Center logo (clickable) -->
+        <a href="index.php">
+            <img src="pantry_pilot_logo-removebg-preview.png" alt="Pantry Pilot Logo">
+        </a>
+    </header>
+</div>
+
+<div class="main-content">
+
+    <!-- LEFT: CURRENT GROCERY LIST -->
+    <div class="grocery-section" id="print_area">
+        <h2>CURRENT GROCERY LIST</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>QTY</th>
+            </tr>
+            <?php if (!empty($listItems)): ?>
+                <?php foreach ($listItems as $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['name']) ?></td>
+                        <td><?= htmlspecialchars($row['quantity']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="2">No items in your shopping list yet.</td></tr>
+            <?php endif; ?>
+        </table>
+
+        <div class="action-buttons">
+            <button type="button" class="save-btn">Save</button>
+            <button type="button" class="print-btn" onclick="handlePrint()">Print</button>
+        </div>
+
+        <!-- HIDDEN FORM USED TO CLEAR LIST AFTER PRINT -->
+        <form method="POST" id="clear_form" style="display:none;">
+            <input type="hidden" name="clear_list" value="1">
+        </form>
+    </div>
+
+    <!-- RIGHT: ADD AN ITEM -->
+    <div class="add-section">
+        <h2>ADD AN ITEM</h2>
+        <form method="POST" action="">
+            <label>Item Name:</label>
+            <input type="text" name="item_name" required>
+
+            <label>Quantity:</label>
+            <input type="number" name="qty" min="1" required>
+
+            <div class="submit-wrapper">
+                <button type="submit" name="list" class="submit-btn">SUBMIT</button>
+                <button type="reset" class="reset-btn">RESET</button>
+>>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
             </div>
         </div>
     </nav>

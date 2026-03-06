@@ -1,6 +1,13 @@
 <?php 
 session_start();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    session_unset();    
+    session_destroy();   
+    header("Location: login.php");
+    exit;
+}
+
 // Prevent access if not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -120,6 +127,7 @@ if ($result && $result->num_rows > 0) {
                 </div>
             </div>
 
+<<<<<<< HEAD
             <!-- pantry items that are about to expire -->
             <div class="pantry-box card-modern">
                 <div class="card-header">
@@ -128,6 +136,12 @@ if ($result && $result->num_rows > 0) {
                 
                 <div class="card-body">
                     <p class="text-muted mb-3"><i class="fa-solid fa-info-circle"></i> The following items in your pantry are expiring in the next 7 days:</p>
+=======
+                <form method="POST" id="clear_form">
+                    <button type="button" class="logout-btn" onclick=handleOut()>Logout</button>
+                </form>
+        </div>
+>>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
                     <div class="alerts-list">
                         <?php if (empty($expiringItems)) : ?>
@@ -163,5 +177,16 @@ if ($result && $result->num_rows > 0) {
         </div>
     </footer>
 
+<<<<<<< HEAD
+=======
+<!-- Slick slider JS (same as index) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="app.js"></script>
+    <script src="account.js"></script>
+
+>>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 </body>
 </html>
