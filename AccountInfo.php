@@ -3,7 +3,7 @@ session_start();
 
 // Prevent access if not logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login_register.php");
+    header("Location: login.php");
     exit;
 }
 
@@ -42,109 +42,126 @@ if ($result && $result->num_rows > 0) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Info - Pantry Pilot</title>
     <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
 
-    <!-- Slick slider CSS (same as index header) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <!-- Modern Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="account.css">
 </head>
 
-<body>
+<body class="account-page">
 
-<div class="header-container">
-    <!-- TOP NAVIGATION LINKS -->
-    <div class="top-nav">
-        <div class="nav-left">
-            <a href="index.php">Home</a>
-            <a href="tracking.php">Pantry</a>
-            <a href="grocery.php">Shopping List</a>
-        </div>
-        <div class="nav-right">
-            <a href="AccountInfo.php", style="color: #145214; text-decoration: underline;">Account Info</a>
-            <a href="login.php">Login</a>
-        </div>
-    </div>
-
-    <!-- ROTATING HEADER (EXACTLY LIKE INDEX) -->
-    <header>
-        <div class="hero-slide">
-            <div>
-                <img src="pasta.jpg" alt="Jars of Pasta">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.php" class="nav-brand">
+                    <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+                </a>
+                <a href="index.php">Home</a>
+                <a href="tracking.php">Pantry</a>
+                <a href="grocery.php">Shopping List</a>
+                <a href="about.php">About & Help</a>
             </div>
-            <div>
-                <img src="frozen-food.avif" alt= "Freezers with Food">
-            </div>
-            <div>
-                <img src="OIP.webp" alt="Fruit Stacked">
-            </div>
-            <div>
-                <img src="00-FOOD-PANTRIES-CLOSING-SAVEUR.webp" alt="Various Pantry Foods">
-            </div>
-            <div>
-                <img src="produce-vegetables.jpg" alt="Fresh Produce">
-            </div>
-            <div>
-                <img src="pantry-stuff.webp" alt="Jars and Juices on Shelves">
+            <div class="nav-right">
+                <a href="AccountInfo.php" class="active">Account Info</a>
+                <a href="logout.php" class="btn-login"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
             </div>
         </div>
+    </nav>
 
-        <a href="index.php">
-            <img src="pantry_pilot_logo-removebg-preview.png" alt="Pantry Pilot Logo">
-        </a>
+    <!-- Mini Hero Section -->
+    <header class="mini-hero">
+        <div class="mini-hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1><i class="fa-solid fa-user-circle"></i> Account Profile</h1>
+            <p>Welcome back, <?php echo htmlspecialchars($userInfo['full_name']); ?>.</p>
+        </div>
     </header>
-</div>
 
-<main>
-    <div class="content-row">
+    <main class="main-content">
+        <div class="content-row">
 
-        <!-- account info -->
-        <div class="container">
-            <h2>Account Information</h2>
+            <!-- account info details -->
+            <div class="container card-modern">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-address-card"></i> Personal Information</h2>
+                </div>
+                
+                <div class="card-body">
+                    <div class="info-list">
+                        <div class="info-item">
+                            <span class="info-label"><i class="fa-solid fa-user-tag"></i> Username:</span>
+                            <span class="info-value"><?php echo htmlspecialchars($userInfo['username']); ?></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fa-solid fa-id-card"></i> Full Name:</span>
+                            <span class="info-value"><?php echo htmlspecialchars($userInfo['full_name']); ?></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fa-solid fa-envelope"></i> Email:</span>
+                            <span class="info-value"><?php echo htmlspecialchars($userInfo['email']); ?></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fa-solid fa-phone"></i> Phone:</span>
+                            <span class="info-value"><?php echo htmlspecialchars($userInfo['phone']); ?></span>
+                        </div>
+                    </div>
 
-            <div class="info">
-                <p><strong>Username:</strong> <?php echo htmlspecialchars($userInfo['username']); ?></p>
-                <p><strong>Name:</strong> <?php echo htmlspecialchars($userInfo['full_name']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($userInfo['email']); ?></p>
-                <p><strong>Phone Number:</strong> <?php echo htmlspecialchars($userInfo['phone']); ?></p>
+                    <!-- Note: For demo purposes, we direct logout to login.php. Normally this calls logout.php -->
+                    <a href="login.php" class="btn-action btn-danger d-block mt-4 text-center">
+                        <i class="fa-solid fa-person-walking-arrow-right"></i> Secure Logout
+                    </a>
+                </div>
             </div>
 
-            <a href="login.php">
-                <button class="logout-btn">Logout</button>
-            </a>
+            <!-- pantry items that are about to expire -->
+            <div class="pantry-box card-modern">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-bell" style="color:#f59e0b"></i> Action Required</h2>
+                </div>
+                
+                <div class="card-body">
+                    <p class="text-muted mb-3"><i class="fa-solid fa-info-circle"></i> The following items in your pantry are expiring in the next 7 days:</p>
+
+                    <div class="alerts-list">
+                        <?php if (empty($expiringItems)) : ?>
+                            <div class="alert-success-box text-center">
+                                <i class="fa-solid fa-check-circle fa-3x" style="color: #4caf50; display:block; margin-bottom: 10px;"></i>
+                                <p style="font-weight: 600; color: #1b5e20;">All Good!</p>
+                                <p style="font-size: 0.9rem; color: #1b5e20;">No items are expiring soon.</p>
+                            </div>
+                        <?php else : ?>
+                            <ul class="expiring-ul">
+                                <?php foreach ($expiringItems as $item): ?>
+                                    <li>
+                                        <div class="item-name"><strong><?php echo htmlspecialchars($item['name']); ?></strong></div>
+                                        <div class="item-exp"><span class="badge badge-warning"><i class="fa-regular fa-clock"></i> <?php echo htmlspecialchars($item['expiration_date']); ?></span></div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+
         </div>
+    </main>
 
-        <!-- pantry items that are about to expire -->
-        <div class="pantry-box">
-            <h2>Pantry Items</h2>
-
-            <p>These items are about to expire:</p>
-
-            <ul>
-                <?php if (empty($expiringItems)) : ?>
-                    <li>No items expiring soon!</li>
-                <?php else : ?>
-                    <?php foreach ($expiringItems as $item): ?>
-                        <li>
-                            <?php echo htmlspecialchars($item['name']); ?> — Expires: <?php echo htmlspecialchars($item['expiration_date']); ?>
-                        </li>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </ul>
-
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+            </div>
+            <p>&copy; 2026 Pantry Pilot. All rights reserved.</p>
         </div>
+    </footer>
 
-    </div>
-</main>
-
-<!-- Slick slider JS (same as index) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script src="app.js"></script>
 </body>
 </html>

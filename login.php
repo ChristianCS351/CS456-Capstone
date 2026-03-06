@@ -57,7 +57,7 @@ if (isset($_POST['register'])) {
 
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // store username's pantry DB name (you had this; kept for consistency)
+    // store username's pantry DB name
     $dbName = preg_replace("/[^a-zA-Z0-9_]/", "", $username) . "_pantry";
 
     $stmt = $conn->prepare("INSERT INTO users (username, password, email, full_name, phone) VALUES (?, ?, ?, ?, ?)");
@@ -83,105 +83,128 @@ if (isset($_POST['register'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login/Register - Pantry Pilot</title>
     <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
 
-    <!-- Slick slider CSS (same as index header) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <!-- Modern Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="login.css">
 </head>
 
-<body>
+<body class="login-page">
 
-<div class="header-container">
-    <!-- TOP NAVIGATION LINKS (same structure as index/tracking) -->
-    <div class="top-nav">
-        <div class="nav-left">
-            <a href="index.php">Home</a>
-            <a href="tracking.php">Pantry</a>
-            <a href="grocery.php">Shopping List</a>
-        </div>
-        <div class="nav-right">
-            <a href="AccountInfo.php"> Account Info</a>
-            <a href="login.php", style="color: #145214; text-decoration: underline;">Login</a>
-        </div>
-    </div>
-
-    <header>
-        <!-- Rotating background images (exactly like index) -->
-        <div class="hero-slide">
-            <div>
-                <img src="pasta.jpg" alt="Jars of Pasta">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.php" class="nav-brand">
+                    <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+                </a>
+                <a href="index.php">Home</a>
+                <a href="tracking.php">Pantry</a>
+                <a href="grocery.php">Shopping List</a>
+                <a href="about.php">About & Help</a>
             </div>
-            <div>
-                <img src="frozen-food.avif" alt= "Freezers with Food">
-            </div>
-            <div>
-                <img src="OIP.webp" alt="Fruit Stacked">
-            </div>
-            <div>
-                <img src="00-FOOD-PANTRIES-CLOSING-SAVEUR.webp" alt="Various Pantry Foods">
-            </div>
-            <div>
-                <img src="produce-vegetables.jpg" alt="Fresh Produce">
-            </div>
-            <div>
-                <img src="pantry-stuff.webp" alt="Jars and Juices on Shelves">
+            <div class="nav-right">
+                <a href="AccountInfo.php">Account Info</a>
+                <a href="login.php" class="btn-login active">Login</a>
             </div>
         </div>
+    </nav>
 
-        <!-- Center logo (clickable) -->
-        <a href="index.php">
-            <img src="pantry_pilot_logo-removebg-preview.png" alt="Pantry Pilot Logo">
-        </a>
-    </header>
-</div>
-
-<div class="form-row">
-    <!-- LOGIN -->
-    <div class="form-box">
-        <h2>Login</h2>
-
-        <form method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-
-            <button type="submit" class="submit-btn" name="login">Log In</button>
-        </form>
-
-        <?php if ($messageLogin): ?>
-            <p class="error"><?= htmlspecialchars($messageLogin) ?></p>
-        <?php endif; ?>
+    <div class="login-hero">
+        <div class="hero-overlay"></div>
     </div>
 
-    <!-- REGISTER -->
-    <div class="form-box">
-        <h2>Create Account</h2>
+    <main class="main-content">
+        <div class="auth-container">
+            <div class="auth-box card-glass">
+                <div class="box-header">
+                    <h2><i class="fa-solid fa-right-to-bracket"></i> Welcome Back</h2>
+                    <p>Enter your details to access your pantry.</p>
+                </div>
 
-        <form method="POST">
-            <input type="text" name="r_username" placeholder="Username" required>
-            <input type="password" name="r_password" placeholder="Password" required>
-            <input type="text" name="r_fullname" placeholder="Full Name" required>
-            <input type="email" name="r_email" placeholder="Email" required>
-            <input type="text" name="r_phone" placeholder="Phone Number" required>
+                <form method="POST" class="modern-form">
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-user"></i> Username</label>
+                        <input type="text" name="username" required placeholder="Your username">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-lock"></i> Password</label>
+                        <input type="password" name="password" required placeholder="• • • • • • • •">
+                    </div>
 
-            <button type="submit" class="submit-btn" name="register">Register</button>
-        </form>
+                    <button type="submit" class="btn-submit" name="login">
+                        Log In <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
 
-        <?php if ($messageRegister): ?>
-            <p class="success"><?= htmlspecialchars($messageRegister) ?></p>
-        <?php endif; ?>
-    </div>
-</div>
+                <?php if ($messageLogin): ?>
+                    <div class="alert message-error">
+                        <i class="fa-solid fa-circle-exclamation"></i> <?= htmlspecialchars($messageLogin) ?>
+                    </div>
+                <?php endif; ?>
+            </div>
 
-<!-- Slick slider JS (same as index) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <div class="auth-box card-glass">
+                <div class="box-header">
+                    <h2><i class="fa-solid fa-user-plus"></i> Create Account</h2>
+                    <p>Join Pantry Pilot and stop food waste today.</p>
+                </div>
 
-    <script src="app.js"></script>
+                <form method="POST" class="modern-form">
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-user-tag"></i> Username</label>
+                        <input type="text" name="r_username" required placeholder="Choose a username">
+                    </div>
+
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-id-card"></i> Full Name</label>
+                        <input type="text" name="r_fullname" required placeholder="Your full name">
+                    </div>
+
+                    <div class="grid-2-col">
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-envelope"></i> Email</label>
+                            <input type="email" name="r_email" required placeholder="hello@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-phone"></i> Phone</label>
+                            <input type="text" name="r_phone" required placeholder="(123) 456-7890">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-lock"></i> Password</label>
+                        <input type="password" name="r_password" required placeholder="Create a strong password">
+                    </div>
+
+                    <button type="submit" class="btn-submit btn-accent" name="register">
+                        Register Account <i class="fa-solid fa-user-check"></i>
+                    </button>
+                </form>
+
+                <?php if ($messageRegister): ?>
+                    <div class="alert message-success">
+                        <i class="fa-solid fa-check-circle"></i> <?= htmlspecialchars($messageRegister) ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+            </div>
+            <p>&copy; 2026 Pantry Pilot. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>

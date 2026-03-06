@@ -30,31 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 /* ------------------ ADD ITEM TO SHOPPING LIST ------------------ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shop_id'])) {
     $shop_id = (int)$_POST['shop_id'];
-
-    // Get item info from foods table
     $stmt = $pdo->prepare("SELECT name, quantity, barcode FROM foods WHERE id = :id");
     $stmt->execute([':id' => $shop_id]);
     $item = $stmt->fetch();
 
     if ($item) {
-        // Check if it already exists in shop_list
         $check = $pdo->prepare("SELECT COUNT(*) FROM shop_list WHERE name = :name");
         $check->execute([':name' => $item['name']]);
         $exists = $check->fetchColumn();
 
         if ($exists == 0) {
-            $stmt2 = $pdo->prepare("
-                INSERT INTO shop_list (name, quantity, barcode)
-                VALUES (:name, :quantity, :barcode)
-            ");
+            $stmt2 = $pdo->prepare("INSERT INTO shop_list (name, quantity, barcode) VALUES (:name, :quantity, :barcode)");
             $stmt2->execute([
                 ':name'     => $item['name'],
                 ':quantity' => $item['quantity'],
-                ':barcode'  => $item['barcode']   // can be null, that's ok
+                ':barcode'  => $item['barcode']
             ]);
         }
     }
-
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
@@ -66,8 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
     $location = trim($_POST['location']);
     $dairy = trim($_POST['dairy']);
     $quantity = (int)$_POST['quantity'];
-
-    // NEW: barcode coming from scanner (hidden input)
     $barcode = isset($_POST['barcode']) ? trim($_POST['barcode']) : null;
     if ($barcode === '') { $barcode = null; }
 
@@ -75,10 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
         echo "<script>alert('Please fill in all required fields correctly before submitting.');</script>";
     } else {
         $today = date('Y-m-d');
-
-        $stmt = $pdo->prepare("INSERT INTO foods 
-            (name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode)
-            VALUES (:name, :expiration_date, :quantity, :location, :dairy, :open_date, :open_expiration_date, :barcode)");
+        $stmt = $pdo->prepare("INSERT INTO foods (name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode) VALUES (:name, :expiration_date, :quantity, :location, :dairy, :open_date, :open_expiration_date, :barcode)");
         $stmt->execute([
             ':name' => $name,
             ':expiration_date' => $expiration_date,
@@ -89,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
             ':open_expiration_date' => date('Y-m-d', strtotime('+1 year')),
             ':barcode' => $barcode
         ]);
-
         header("Location: " . $_SERVER['PHP_SELF']);
         exit;
     }
@@ -103,151 +90,166 @@ $pantry_items = $stmt->fetchAll();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pantry - Pantry Pilot</title>
     <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
 
-    <!-- Slick slider CSS (same as index header) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <!-- Modern Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="tracking.css">
 </head>
-<body>
+<body class="tracking-page">
 
-<div class="header-container">
-
-    <!-- TOP NAVIGATION LINKS (same as index) -->
-    <div class="top-nav">
-        <div class="nav-left">
-            <a href="index.php">Home</a>
-            <a href="tracking.php", style="color: #145214; text-decoration: underline;">Pantry</a>
-            <a href="grocery.php">Shopping List</a>
-        </div>
-        <div class="nav-right">
-            <a href="AccountInfo.php">Account Info</a>
-            <a href="login.php">Login</a>
-        </div>
-    </div>
-
-    <!-- ROTATING HEADER (copied from index) -->
-    <header>
-        <div class="hero-slide">
-            <div>
-                <img src="pasta.jpg" alt="Jars of Pasta">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.php" class="nav-brand">
+                    <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+                </a>
+                <a href="index.php">Home</a>
+                <a href="tracking.php" class="active">Pantry</a>
+                <a href="grocery.php">Shopping List</a>
+                <a href="about.php">About & Help</a>
             </div>
-            <div>
-                <img src="frozen-food.avif" alt= "Freezers with Food">
-            </div>
-            <div>
-                <img src="OIP.webp" alt="Fruit Stacked">
-            </div>
-            <div>
-                <img src="00-FOOD-PANTRIES-CLOSING-SAVEUR.webp" alt="Various Pantry Foods">
-            </div>
-            <div>
-                <img src="produce-vegetables.jpg" alt="Fresh Produce">
-            </div>
-            <div>
-                <img src="pantry-stuff.webp" alt="Jars and Juices on Shelves">
+            <div class="nav-right">
+                <a href="AccountInfo.php">Account Info</a>
+                <a href="login.php" class="btn-login">Login</a>
             </div>
         </div>
+    </nav>
 
-        <a href="index.php">
-            <img src="pantry_pilot_logo-removebg-preview.png" alt="Pantry Pilot Logo">
-        </a>
+    <!-- Mini Hero Section -->
+    <header class="mini-hero">
+        <div class="mini-hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1><i class="fa-solid fa-box-open"></i> My Pantry</h1>
+            <p>Manage your ingredients, track expiration dates, and restock seamlessly.</p>
+        </div>
     </header>
-</div>
 
-<div class="main-content">
+    <main class="main-content">
+        <div class="split-layout">
+            
+            <!-- Left: Pantry Table -->
+            <section class="pantry-section card-modern">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-cubes"></i> Current Inventory</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>QTY</th>
+                                <th>Expiration</th>
+                                <th>Location</th>
+                                <th class="text-center" colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($pantry_items)): ?>
+                                <?php foreach ($pantry_items as $item): ?>
+                                    <tr>
+                                        <td><strong><?= htmlspecialchars($item['name']) ?></strong></td>
+                                        <td><span class="badge badge-qty"><?= htmlspecialchars($item['quantity']) ?></span></td>
+                                        <td><?= htmlspecialchars($item['expiration_date']) ?></td>
+                                        <td><span class="badge badge-location"><?= htmlspecialchars($item['location']) ?></span></td>
+                                        <td class="action-cell">
+                                            <form method="POST" action="" class="inline-form">
+                                                <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
+                                                <button type="submit" class="btn-action btn-danger" title="Remove Item"><i class="fa-solid fa-trash-can"></i> Remove</button>
+                                            </form>
+                                        </td>
+                                        <td class="action-cell">
+                                            <form method="POST" action="" class="inline-form">
+                                                <input type="hidden" name="shop_id" value="<?= $item['id'] ?>">
+                                                <button type="submit" class="btn-action btn-warning" title="Add to Shopping List"><i class="fa-solid fa-cart-plus"></i> Shop</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="6" class="text-center text-muted"><br>No items found in pantry.<br>Use the form on the right to add some!<br><br></td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-    <div class="pantry-section">
-        <h2>MY PANTRY</h2>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>QTY</th>
-                <th>Expiration</th>
-                <th>Location</th>
-                <th colspan="2">Actions</th>
-            </tr>
+            <!-- Right: Add Item & Scanner -->
+            <aside class="sidebar-section">
+                <!-- Add Item Form -->
+                <div class="form-section card-modern">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-plus-circle"></i> Add an Item</h2>
+                    </div>
+                    <form method="POST" action="" id="add_item_form" class="modern-form">
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-tag"></i> Name</label>
+                            <input type="text" name="name" required placeholder="e.g. Canned Beans">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-calendar-alt"></i> Expiration Date</label>
+                            <input type="date" name="expiration_date" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-map-marker-alt"></i> Location</label>
+                            <input type="text" name="location" required placeholder="e.g. Bottom Shelf">
+                        </div>
+                        
+                        <div class="grid-2-col">
+                            <div class="input-group">
+                                <label><i class="fa-solid fa-shapes"></i> Category</label>
+                                <input type="text" name="dairy" placeholder="Optional">
+                            </div>
+                            <div class="input-group">
+                                <label><i class="fa-solid fa-layer-group"></i> QTY</label>
+                                <input type="number" name="quantity" min="1" required value="1">
+                            </div>
+                        </div>
 
-            <?php if (!empty($pantry_items)): ?>
-                <?php foreach ($pantry_items as $item): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($item['name']) ?></td>
-                        <td><?= htmlspecialchars($item['quantity']) ?></td>
-                        <td><?= htmlspecialchars($item['expiration_date']) ?></td>
-                        <td><?= htmlspecialchars($item['location']) ?></td>
-                        <td>
-                            <form method="POST" action="" style="display:inline;">
-                                <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
-                                <button type="submit" class="delete-btn">Remove</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form method="POST" action="" style="display:inline;">
-                                <input type="hidden" name="shop_id" value="<?= $item['id'] ?>">
-                                <button type="submit" class="shop-btn">+ Shopping</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr><td colspan="6">No items found in pantry.</td></tr>
-            <?php endif; ?>
-        </table>
-    </div>
+                        <input type="hidden" name="barcode" id="barcode">
+                        
+                        <button type="submit" name="add_item" class="btn-submit">
+                            <i class="fa-solid fa-check"></i> Save Item
+                        </button>
+                    </form>
+                </div>
 
-    <div class="form-section">
-        <h2>ADD AN ITEM</h2>
-        <form method="POST" action="" id="add_item_form">
-            <label>Name:</label>
-            <input type="text" name="name" required>
-
-            <label>Expiration:</label>
-            <input type="date" name="expiration_date" required>
-
-            <label>Location:</label>
-            <input type="text" name="location" required>
-
-            <label>Category:</label>
-            <input type="text" name="dairy">
-
-            <label>QTY:</label>
-            <input type="number" name="quantity" min="1" required>
-
-            <!-- NEW: barcode from scanner (hidden) -->
-            <input type="hidden" name="barcode" id="barcode">
-
-            <div style="text-align:center; margin-top:10px;">
-                <button type="submit" name="add_item" class="submit-btn">SUBMIT</button>
-            </div>
-        </form>
-
-        <div class="scan-section">
-            <h3>OR SCAN BARCODE</h3>
-
-            <button type="button" class="scan-btn" id="scan_btn">SCAN</button>
-
-            <div id="reader" style="width:100%; max-width:420px; margin:15px auto; display:none;"></div>
-
-            <p id="scan_result" style="font-weight:600; color:#004b23;"></p>
+                <!-- Barcode Scanner -->
+                <div class="scan-section card-modern mt-4">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-barcode"></i> Quick Scan</h2>
+                    </div>
+                    <div class="scan-body text-center">
+                        <p class="text-muted mb-3">Scan product barcodes to instantly import details.</p>
+                        <button type="button" class="btn-scan" id="scan_btn"><i class="fa-solid fa-camera"></i> Scan Barcode</button>
+                        <div id="reader" style="width:100%; max-width:100%; margin:15px auto; display:none; border-radius: 8px; overflow: hidden;"></div>
+                        <p id="scan_result" class="scan-result-text"></p>
+                    </div>
+                </div>
+            </aside>
         </div>
-    </div>
-</div>
+    </main>
 
-<!-- Slick slider JS (same as index) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+            </div>
+            <p>&copy; 2026 Pantry Pilot. All rights reserved.</p>
+        </div>
+    </footer>
 
-<!-- Barcode library -->
-<script src="https://unpkg.com/html5-qrcode"></script>
-
-<!-- Your separate JS file -->
-<script src="barcode_scanner.js"></script>
-
-    <script src="app.js"></script>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="barcode_scanner.js"></script>
 </body>
 </html>

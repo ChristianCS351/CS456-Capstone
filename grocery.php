@@ -56,122 +56,154 @@ if ($result) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping List - Pantry Pilot</title>
     <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
 
-    <!-- Slick slider CSS (same as index header) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <!-- Modern Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="grocery.css">
 </head>
-<body>
+<body class="grocery-page">
 
-<div class="header-container">
-    <div class="top-nav">
-        <div class="nav-left">
-            <a href="index.php">Home</a>
-            <a href="tracking.php">Pantry</a>
-            <a href="grocery.php", style="color: #145214; text-decoration: underline;">Shopping List</a>
-        </div>
-        <div class="nav-right">
-            <a href="AccountInfo.php">Account Info</a>
-            <a href="login.php">Login</a>
-        </div>
-    </div>
-
-    <header>
-        <!-- Rotating background images (same order as index) -->
-        <div class="hero-slide">
-            <div><img src="pasta.jpg" alt="Jars of Pasta"></div>
-            <div><img src="frozen-food.avif" alt="Freezers with Food"></div>
-            <div><img src="OIP.webp" alt="Fruit Stacked"></div>
-            <div><img src="00-FOOD-PANTRIES-CLOSING-SAVEUR.webp" alt="Various Pantry Foods"></div>
-            <div><img src="produce-vegetables.jpg" alt="Fresh Produce"></div>
-            <div><img src="pantry-stuff.webp" alt="Jars and Juices on Shelves"></div>
-        </div>
-
-        <!-- Center logo (clickable) -->
-        <a href="index.php">
-            <img src="pantry_pilot_logo-removebg-preview.png" alt="Pantry Pilot Logo">
-        </a>
-    </header>
-</div>
-
-<div class="main-content">
-
-    <!-- LEFT: CURRENT GROCERY LIST -->
-    <div class="grocery-section" id="print_area">
-        <h2>CURRENT GROCERY LIST</h2>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>QTY</th>
-            </tr>
-            <?php if (!empty($listItems)): ?>
-                <?php foreach ($listItems as $row): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($row['name']) ?></td>
-                        <td><?= htmlspecialchars($row['quantity']) ?></td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr><td colspan="2">No items in your shopping list yet.</td></tr>
-            <?php endif; ?>
-        </table>
-
-        <div class="action-buttons">
-            <button type="button" class="save-btn">Save</button>
-            <button type="button" class="print-btn" onclick="handlePrint()">Print</button>
-        </div>
-
-        <!-- HIDDEN FORM USED TO CLEAR LIST AFTER PRINT -->
-        <form method="POST" id="clear_form" style="display:none;">
-            <input type="hidden" name="clear_list" value="1">
-        </form>
-    </div>
-
-    <!-- RIGHT: ADD AN ITEM -->
-    <div class="add-section">
-        <h2>ADD AN ITEM</h2>
-        <form method="POST" action="">
-            <label>Item Name:</label>
-            <input type="text" name="item_name" required>
-
-            <label>Quantity:</label>
-            <input type="number" name="qty" min="1" required>
-
-            <div class="submit-wrapper">
-                <button type="submit" name="list" class="submit-btn">SUBMIT</button>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.php" class="nav-brand">
+                    <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+                </a>
+                <a href="index.php">Home</a>
+                <a href="tracking.php">Pantry</a>
+                <a href="grocery.php" class="active">Shopping List</a>
+                <a href="about.php">About & Help</a>
             </div>
-
-            <input type="hidden" name="barcode" id="barcode">
-        </form>
-
-        <?php if (!empty($messageList)): ?>
-            <p class="success"><?= htmlspecialchars($messageList) ?></p>
-        <?php endif; ?>
-
-        <div class="scan-section">
-            <h3>OR SCAN BARCODE</h3>
-
-            <button type="button" class="scan-btn" id="scan_btn">SCAN</button>
-
-            <div id="reader" style="width:100%; max-width:420px; margin:15px auto; display:none;"></div>
-
-            <p id="scan_result" style="font-weight:600; color:#004b23;"></p>
+            <div class="nav-right">
+                <a href="AccountInfo.php">Account Info</a>
+                <a href="login.php" class="btn-login">Login</a>
+            </div>
         </div>
-    </div>
+    </nav>
 
-</div>
+    <!-- Mini Hero Section -->
+    <header class="mini-hero">
+        <div class="mini-hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1><i class="fa-solid fa-cart-shopping"></i> Shopping List</h1>
+            <p>Plan your next grocery trip, save items, and print your list seamlessly.</p>
+        </div>
+    </header>
 
-<!-- Slick slider JS (same as index) -->
-<!-- Barcode library -->
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script src="barcode_scanner.js?v=1"></script>
+    <main class="main-content">
+        <div class="split-layout">
+            
+            <!-- Left: Current Grocery List -->
+            <section class="grocery-section card-modern" id="print_area">
+                <div class="card-header d-flex-between">
+                    <h2><i class="fa-solid fa-clipboard-list"></i> Current List</h2>
+                    <div class="print-hide">
+                        <span class="badge badge-qty"><?= count($listItems) ?> Items</span>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>QTY</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($listItems)): ?>
+                                <?php foreach ($listItems as $row): ?>
+                                    <tr>
+                                        <td><strong><?= htmlspecialchars($row['name']) ?></strong></td>
+                                        <td><span class="badge badge-location"><?= htmlspecialchars($row['quantity']) ?></span></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="2" class="text-center text-muted"><br>No items in your shopping list yet.<br><br></td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-    <script src="app.js"></script>
+                <div class="card-footer action-buttons">
+                    <button type="button" class="btn-action btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    <button type="button" class="btn-action btn-primary" onclick="handlePrint()"><i class="fa-solid fa-print"></i> Print</button>
+                </div>
+
+                <!-- HIDDEN FORM USED TO CLEAR LIST AFTER PRINT -->
+                <form method="POST" id="clear_form" style="display:none;">
+                    <input type="hidden" name="clear_list" value="1">
+                </form>
+            </section>
+
+            <!-- Right: Add an Item -->
+            <aside class="sidebar-section">
+                <!-- Add Item Form -->
+                <div class="form-section card-modern">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-plus-circle"></i> Add an Item</h2>
+                    </div>
+                    <form method="POST" action="" class="modern-form">
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-tag"></i> Item Name</label>
+                            <input type="text" name="item_name" required placeholder="e.g. Milk">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-layer-group"></i> Quantity</label>
+                            <input type="number" name="qty" min="1" required value="1">
+                        </div>
+
+                        <input type="hidden" name="barcode" id="barcode">
+                        
+                        <button type="submit" name="list" class="btn-submit">
+                            <i class="fa-solid fa-check"></i> Add Item
+                        </button>
+                    </form>
+
+                    <?php if (!empty($messageList)): ?>
+                        <div class="alert message-success text-center" style="margin: 0 24px 24px;">
+                            <i class="fa-solid fa-circle-check"></i> <?= htmlspecialchars($messageList) ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <!-- Barcode Scanner -->
+                <div class="scan-section card-modern mt-4">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-barcode"></i> Quick Scan</h2>
+                    </div>
+                    <div class="scan-body text-center">
+                        <p class="text-muted mb-3">Scan an empty product to add it straight to your list.</p>
+                        <button type="button" class="btn-scan" id="scan_btn"><i class="fa-solid fa-camera"></i> Scan Barcode</button>
+                        <div id="reader" style="width:100%; max-width:100%; margin:15px auto; display:none; border-radius: 8px; overflow: hidden;"></div>
+                        <p id="scan_result" class="scan-result-text"></p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+            </div>
+            <p>&copy; 2026 Pantry Pilot. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="barcode_scanner.js?v=1"></script>
     <script src="grocery.js"></script>
 </body>
 </html>
