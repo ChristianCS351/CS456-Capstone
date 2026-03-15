@@ -133,7 +133,6 @@ body {
     z-index: 2;
 }
 
-<<<<<<< HEAD
 .hero-content {
     position: relative;
     z-index: 3;
@@ -148,34 +147,12 @@ body {
     font-weight: 700;
     margin-bottom: 10px;
 }
-=======
-        /* ---------- TRACKING PAGE LAYOUT ---------- */
-        .main-content {
-            max-width: 1800px;
-            margin: 40px auto;
-            display: flex;
-            justify-content: space-between;
-            gap: 30px;
-        }
-
-        .pantry-section,
-        .form-section,
-        .option-section,
-        .pantry-options {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-            flex: 1;
-        }
->>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
 .hero-content p {
     font-size: 1.1rem;
     color: rgba(255, 255, 255, 0.9);
 }
 
-<<<<<<< HEAD
 /* =========== SPLIT LAYOUT =========== */
 .main-content {
     max-width: 1300px;
@@ -184,18 +161,6 @@ body {
     position: relative;
     z-index: 10;
 }
-=======
-        .pantry-section h2,
-        .form-section h2,
-        .option-section h2,
-        .pantry-options h2{
-            color: #1b5e20;
-            text-align: center;
-            border-bottom: 3px solid #ffcf33;
-            padding-bottom: 8px;
-            margin-bottom: 20px;
-        }
->>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
 .split-layout {
     display: flex;
@@ -203,7 +168,6 @@ body {
     align-items: flex-start;
 }
 
-<<<<<<< HEAD
 .pantry-section {
     flex: 2;
 }
@@ -211,22 +175,6 @@ body {
 .sidebar-section {
     flex: 1;
 }
-=======
-        th {
-            background-color: #1b5e20;
-            color: white;
-            padding: 10px;
-            border-right: 1px solid #a7b4a4;
-            text-align: center;
-        }
-
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-            background-color: #f7f7f7;
-        }
->>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
 @media (max-width: 950px) {
     .split-layout {
@@ -285,7 +233,6 @@ body {
     border-bottom: 2px solid var(--border-color);
 }
 
-<<<<<<< HEAD
 .modern-table td {
     padding: 15px 10px;
     border-bottom: 1px solid var(--border-color);
@@ -295,73 +242,11 @@ body {
 .modern-table tbody tr {
     transition: background 0.2s ease;
 }
-=======
-        .submit-btn, .reset-btn {
-            display: inline-block;
-            background-color: #e5b600;
-            color: #004b23;
-            border: 2px solid #004b23;
-            font-weight: bold;
-            padding: 10px 25px;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-left: 20px;
-            text-align: center;
-            border-radius: 8px;
-        }
-          .scan-btn {
-            display: inline-block;
-            background-color: #2fa6d2;
-            color: #204860;
-            border: 2px solid #204860;
-            font-weight: bold;
-            gap: 50px;
-            margin-left: 20px;
-            padding: 10px 25px;
-            cursor: pointer;
-            transition: 0.2s;
-            text-align: center;
-            border-radius: 8px;
-        }
-
-        .cookie-btn {
-            display: inline-block;
-            background-color: #bcb48e;
-            color: #000000;
-            border: 2px solid #000000;
-            font-weight: bold;
-            gap: 50px;
-            margin-left: 20px;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-            border-radius: 8px;
-        }
-
-        .cookie-btn:hover {
-            background-color: #363528;
-            color: #ffffff;
-        }
-
-        .scan-btn:hover {
-            background-color: #204860;
-            color: #ffffff;
-        }
-
-
-
-        .submit-btn:hover, .reset-btn:hover {
-            background-color: #004b23;
-            color: #ffffff;
-        }
->>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
 
 .modern-table tbody tr:hover {
     background: rgba(27, 94, 32, 0.03);
 }
 
-<<<<<<< HEAD
 /* Badges */
 .badge {
     padding: 6px 12px;
@@ -681,13 +566,3 @@ footer {
         font-size: 1.8rem !important;
     }
 }
-=======
-        .scan-section h3 {
-            color: #004b23;
-        }
-
-
-
-
-      
->>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574

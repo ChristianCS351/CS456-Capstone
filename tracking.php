@@ -23,8 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['check_barcode'])) {
     $barcode = $_GET['check_barcode'];
     
     // First, check if it's currently in the pantry
-    $stmt = $pdo->prepare("SELECT id, name FROM foods WHERE barcode = :barcode OR id = :barcode LIMIT 1");
-    $stmt->execute([':barcode' => $barcode]);
+    $stmt = $pdo->prepare("SELECT id, name FROM foods WHERE barcode = :barcode OR id = :id_barcode LIMIT 1");
+    $stmt->execute([
+        ':barcode' => $barcode,
+        ':id_barcode' => $barcode
+    ]);
     $item = $stmt->fetch();
     
     header('Content-Type: application/json');
@@ -44,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['check_barcode'])) {
         }
     }
     exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = (int)$_POST['delete_id'];
@@ -83,17 +87,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['quick_update_item']))
     $barcode = $_POST['update_barcode'];
     $expiration_date = trim($_POST['update_expiration_date']);
     
-    $stmt = $pdo->prepare("UPDATE foods SET quantity = quantity + 1, expiration_date = :expiration_date WHERE barcode = :barcode OR id = :barcode");
+    $stmt = $pdo->prepare("UPDATE foods SET quantity = quantity + 1, expiration_date = :expiration_date WHERE barcode = :barcode OR id = :id_barcode");
     $stmt->execute([
         ':expiration_date' => $expiration_date,
-        ':barcode' => $barcode
+        ':barcode' => $barcode,
+        ':id_barcode' => $barcode
     ]);
     
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
 
->>>>>>> 16c4911 (Tracking feature updates: dual barcode scanner, history logic, schema fixes)
 /* ------------------ INSERT NEW ITEM ------------------ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
     $name = trim($_POST['name']);
@@ -118,10 +122,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
                 ':dairy' => $dairy
             ]);
             
-            // Using ID since user wants Barcode to be Primary Key
             $stmt = $pdo->prepare("INSERT INTO foods (id, name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode) 
                                    VALUES (:id, :name, :expiration_date, :quantity, :location, :dairy, :open_date, :open_expiration_date, :barcode)
-                                   ON DUPLICATE KEY UPDATE quantity = quantity + :quantity");
+                                   ON DUPLICATE KEY UPDATE quantity = quantity + :update_quantity");
             $stmt->execute([
                 ':id' => $barcode,
                 ':name' => $name,
@@ -131,7 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
                 ':dairy' => $dairy,
                 ':open_date' => $today,
                 ':open_expiration_date' => date('Y-m-d', strtotime('+1 year')),
-                ':barcode' => $barcode
+                ':barcode' => $barcode,
+                ':update_quantity' => $quantity
             ]);
         } else {
             // Let ID Auto Increment
@@ -251,11 +255,6 @@ $pantry_items = $stmt->fetchAll();
                     </table>
                 </div>
             </section>
-<<<<<<< HEAD
-
-<<<<<<< HEAD
-=======
->>>>>>> 16c4911 (Tracking feature updates: dual barcode scanner, history logic, schema fixes)
             <!-- Right: Add Item & Scanner -->
             <aside class="sidebar-section">
                 <!-- Add Item Form -->
@@ -289,51 +288,6 @@ $pantry_items = $stmt->fetchAll();
                                 <input type="number" name="quantity" min="1" required value="1">
                             </div>
                         </div>
-<<<<<<< HEAD
-=======
-    <div class="pantry-options">
-        <h2>HOW TO SORT PANTRY</h2>
-            <div style="text-align:center; margin-top:35px;">
-                <button type="submit" name="expiration" class="cookie-btn">NAME (A-Z)</button>
-            </div>
-            <div style="text-align:center; margin-top:35px;">
-                <button type="submit" name="location" class="cookie-btn">QTY (High, Low)</button>
-            </div>
-            <div style="text-align:center; margin-top:35px;">
-                <button type="submit" name="category" class="cookie-btn">QTY (Low, High)</button>
-            </div>
-            <div style="text-align:center; margin-top:35px;">
-                <button type="submit" name="expiration" class="cookie-btn">EXPIRATION (Most Recent)</button>
-            </div>
-            <div style="text-align:center; margin-top:35px;">
-                <button type="submit" name="location" class="cookie-btn">EXPIRATION (Least Recent)</button>
-            </div>
-            <div style="text-align:center; margin-top:35px;">
-                <button type="submit" name="category" class="cookie-btn">LOCATION (A-Z)</button>
-            </div>
-            <div style="text-align:center; margin-top:35px;">
-                <button type="submit" name="category" class="cookie-btn">ACTIONS (A-Z)</button>
-            </div>
-            <div style="text-align:center; margin-top:35px;">
-                <button type="submit" name="category" class="cookie-btn">WHEN ADDED (DEFAULT)</button>
-            </div>
-    </div>
-
-    <div class="pantry-section">
-        <h2>MY PANTRY</h2>
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>Expiration Date</th>
-                <th>Location</th>
-                <th>Food Category</th>
-                <th>Quantity</th>
-            </tr>
->>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
-
-                        <input type="hidden" name="barcode" id="barcode">
-=======
-
                         <div class="input-group">
                             <label><i class="fa-solid fa-barcode"></i> Barcode (Optional)</label>
                             <div style="display: flex; gap: 10px; align-items: center;">
@@ -343,7 +297,6 @@ $pantry_items = $stmt->fetchAll();
                             <div id="reader" style="width:100%; max-width:100%; margin:15px auto; display:none; border-radius: 8px; overflow: hidden;"></div>
                             <p id="scan_result" class="scan-result-text"></p>
                         </div>
->>>>>>> 16c4911 (Tracking feature updates: dual barcode scanner, history logic, schema fixes)
                         
                         <button type="submit" name="add_item" class="btn-submit">
                             <i class="fa-solid fa-check"></i> Save Item
@@ -351,76 +304,21 @@ $pantry_items = $stmt->fetchAll();
                     </form>
                 </div>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <!-- Barcode Scanner -->
-=======
                 <!-- Quick Scan Section -->
->>>>>>> 16c4911 (Tracking feature updates: dual barcode scanner, history logic, schema fixes)
                 <div class="scan-section card-modern mt-4">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-barcode"></i> Quick Scan</h2>
                     </div>
                     <div class="scan-body text-center">
                         <p class="text-muted mb-3">Scan product barcodes to instantly import details.</p>
-<<<<<<< HEAD
-                        <button type="button" class="btn-scan" id="scan_btn"><i class="fa-solid fa-camera"></i> Scan Barcode</button>
-                        <div id="reader" style="width:100%; max-width:100%; margin:15px auto; display:none; border-radius: 8px; overflow: hidden;"></div>
-                        <p id="scan_result" class="scan-result-text"></p>
-=======
                         <button type="button" class="btn-scan" id="quick_scan_btn"><i class="fa-solid fa-camera"></i> Quick Scan</button>
                         <div id="quick_reader" style="width:100%; max-width:100%; margin:15px auto; display:none; border-radius: 8px; overflow: hidden;"></div>
                         <p id="quick_scan_result" class="scan-result-text"></p>
->>>>>>> 16c4911 (Tracking feature updates: dual barcode scanner, history logic, schema fixes)
                     </div>
                 </div>
             </aside>
         </div>
     </main>
-<<<<<<< HEAD
-=======
-    <div class="form-section">
-        <h2>ADD AN ITEM</h2>
-        <form method="POST" action="" id="add_item_form">
-            <label>Name:</label>
-            <input type="text" name="name" required>
-
-            <label>Expiration:</label>
-            <input type="date" name="expiration_date" required>
-
-            <label>Location:</label>
-            <input type="text" name="location" required>
-
-            <label>Food Category:</label>
-            <input type="text" id="fruit" name="dairy" required>
-
-            <label>QTY:</label>
-            <input type="number" name="quantity" min="1" required>
-
-            <!-- NEW: barcode from scanner (hidden) -->
-            <input type="hidden" name="barcode" id="barcode">
-
-            <div style="text-align:center; margin-top:10px;">
-                <button type="submit" name="add_item" class="submit-btn">SUBMIT</button>
-                <button type="reset" class="reset-btn">RESET</button>
-            </div>
-        </form>
-
-        <div class="scan-section">
-            <h3>OR SCAN BARCODE</h3>
-
-            <button type="button" class="scan-btn" id="scan_btn">SCAN</button>
-
-            <div id="reader" style="width:100%; max-width:420px; margin:15px auto; display:none;"></div>
-
-            <p id="scan_result" style="font-weight:600; color:#004b23;"></p>
-            </div>
-        </div>
-    
-</div>
->>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
-=======
-
     <!-- Quick Scan Update Modal -->
     <div id="quickScanModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
         <div class="modal-content card-modern" style="background: white; padding: 25px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
@@ -440,7 +338,6 @@ $pantry_items = $stmt->fetchAll();
             </form>
         </div>
     </div>
->>>>>>> 16c4911 (Tracking feature updates: dual barcode scanner, history logic, schema fixes)
 
     <!-- Footer -->
     <footer>
@@ -454,6 +351,6 @@ $pantry_items = $stmt->fetchAll();
 
     <!-- Scripts -->
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <script src="barcode_scanner.js"></script>
+    <script src="barcode_scanner.js?v=1.1"></script>
 </body>
 </html>

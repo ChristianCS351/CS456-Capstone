@@ -17,7 +17,7 @@ function initializeScanner(btnId, readerId, resultId, targetInputId = null) {
             try {
                 await html5QrCode.stop();
                 await html5QrCode.clear();
-            } catch (e) {}
+            } catch (e) { }
 
             activeScannerId = null;
             reader.style.display = "none";
@@ -31,17 +31,17 @@ function initializeScanner(btnId, readerId, resultId, targetInputId = null) {
             try {
                 await html5QrCode.stop();
                 await html5QrCode.clear();
-                
+
                 // Reset the other scanner's UI
                 const oldBtn = activeScannerId === "reader" ? document.getElementById("scan_btn") : document.getElementById("quick_scan_btn");
                 const oldReader = document.getElementById(activeScannerId);
                 const oldResult = activeScannerId === "reader" ? document.getElementById("scan_result") : document.getElementById("quick_scan_result");
-                
+
                 if (oldBtn) oldBtn.innerHTML = `<i class="fa-solid fa-camera"></i> Scan`;
                 if (oldReader) oldReader.style.display = "none";
                 if (oldResult) oldResult.textContent = "";
 
-            } catch (e) {}
+            } catch (e) { }
         }
 
         // Start THIS scanner
@@ -51,29 +51,39 @@ function initializeScanner(btnId, readerId, resultId, targetInputId = null) {
 
         html5QrCode = new Html5Qrcode(readerId);
 
+        let isHandlingScan = false;
+
         try {
-            const cameras = await Html5Qrcode.getCameras();
-
-            if (!cameras || cameras.length === 0) {
-                scanResult.textContent = "No camera found on this device.";
-                scanBtn.innerHTML = `<i class="fa-solid fa-camera"></i> Scan`;
-                reader.style.display = "none";
-                activeScannerId = null;
-                return;
-            }
-
-            // Prefer "back" camera
-            const camId = cameras[cameras.length - 1].id;
             activeScannerId = readerId;
 
+            // Use facingMode which prompts for permissions gracefully without needing getCameras first
             await html5QrCode.start(
-                camId,
-                { fps: 10, qrbox: { width: 250, height: 250 } },
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    formatsToSupport: [
+                        Html5QrcodeSupportedFormats.UPC_A,
+                        Html5QrcodeSupportedFormats.UPC_E,
+                        Html5QrcodeSupportedFormats.EAN_13,
+                        Html5QrcodeSupportedFormats.EAN_8,
+                        Html5QrcodeSupportedFormats.CODE_39,
+                        Html5QrcodeSupportedFormats.CODE_128,
+                        Html5QrcodeSupportedFormats.ITF,
+                        Html5QrcodeSupportedFormats.QR_CODE
+                    ]
+                },
                 async (decodedText) => {
+                    if (isHandlingScan) return;
+                    isHandlingScan = true;
+
                     scanResult.textContent = "Scanned: " + decodedText;
 
-                    if (targetInput) {
-                        targetInput.value = decodedText;
+                    // Fetch the input dynamically to avoid relying on a cached, potentially stale DOM reference
+                    const currentTargetInput = targetInputId ? document.getElementById(targetInputId) : null;
+
+                    if (currentTargetInput) {
+                        currentTargetInput.value = decodedText;
                     } else {
                         // For Quick Scan, check if item exists in DB
                         scanResult.textContent = "Checking database...";
@@ -90,14 +100,14 @@ function initializeScanner(btnId, readerId, resultId, targetInputId = null) {
                                 // Item does not exist, populate add item form
                                 scanResult.textContent = "New item. Please fill out details.";
                                 document.getElementById("barcode").value = decodedText;
-                                
+
                                 // Auto-fill from history if available
                                 if (data.history_name) {
                                     document.querySelector("input[name='name']").value = data.history_name;
                                     document.querySelector("input[name='dairy']").value = data.history_dairy;
                                     scanResult.textContent = "Item recognized from history! Please fill out remaining details.";
                                 }
-                                
+
                                 // smooth scroll up to the form
                                 document.getElementById("add_item_form").scrollIntoView({ behavior: 'smooth', block: 'start' });
                             }
@@ -109,13 +119,13 @@ function initializeScanner(btnId, readerId, resultId, targetInputId = null) {
                     try {
                         await html5QrCode.stop();
                         await html5QrCode.clear();
-                    } catch (e) {}
+                    } catch (e) { }
 
                     activeScannerId = null;
                     reader.style.display = "none";
                     scanBtn.innerHTML = `<i class="fa-solid fa-camera"></i> Scan`;
                 },
-                () => {} // Ignore continuous scan errors
+                () => { } // Ignore continuous scan errors
             );
 
             scanResult.textContent = "Point camera at barcode...";

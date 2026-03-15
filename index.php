@@ -61,71 +61,9 @@ $groceryItems = $groceryStmt->fetchAll();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<<<<<<< HEAD
     <!-- Modern Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-=======
-        <style>
-
-        /* ---------- MAIN CONTENT ---------- */
-        main {
-            margin: 40px auto;
-            max-width: 1000px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 30px 40px 45px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-        }
-
-        h2 {
-            color: #1b5e20;
-            text-align: center;
-            border-bottom: 3px solid #ffcf33;
-            padding-bottom: 8px;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th {
-            background-color: #1b5e20;
-            color: white;
-            padding: 12px;
-            text-align: left;
-            font-size: 17px;
-        }
-
-        td {
-            background-color: #f7f7f7;
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tr:hover td {
-            background-color: #e8f5e9;
-        }
-
-        section {
-            margin-bottom: 50px;
-        }
-
-        body, h2, th, td, p {
-            font-style: italic;
-        }
-
-        /*----Footer Section--------*/
-
-        footer  {
-           
-
-        }
-    </style>
->>>>>>> 4f61dc08a4e72406efbccb8130e3bd2456fe1574
     
     <link rel="stylesheet" href="index.css">
 </head>
