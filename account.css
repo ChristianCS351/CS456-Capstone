@@ -274,12 +274,13 @@ body {
 /* Buttons */
 .btn-action {
     border: none;
-    padding: 12px;
+    padding: 30px;
     border-radius: 8px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    margin-left: 120px;
+    transition: all 0.3s ease;
     text-decoration: none;
     font-family: inherit;
 }

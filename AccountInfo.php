@@ -121,9 +121,10 @@ if ($result && $result->num_rows > 0) {
                     </div>
 
                     <!-- Note: For demo purposes, we direct logout to login.php. Normally this calls logout.php -->
-                    <a href="login.php" class="btn-action btn-danger d-block mt-4 text-center">
-                        <i class="fa-solid fa-person-walking-arrow-right"></i> Secure Logout
-                    </a>
+                     <form method="POST" id="clear_form">
+                        <button type="button" href="login.php" class="btn-action btn-danger d-block mt-4 text-center" class="logout-btn" onclick=handleOut()>
+                        <i class="fa-solid fa-person-walking-arrow-right"></i>Secure Logout 
+                     </form>
                 </div>
             </div>
 

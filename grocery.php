@@ -176,6 +176,7 @@ if ($result) {
                     <?php endif; ?>
                 </div>
 
+
                 <!-- Barcode Scanner -->
                 <div class="scan-section card-modern mt-4">
                     <div class="card-header">
@@ -186,8 +187,27 @@ if ($result) {
                         <button type="button" class="btn-scan" id="scan_btn"><i class="fa-solid fa-camera"></i> Scan Barcode</button>
                         <div id="reader" style="width:100%; max-width:100%; margin:15px auto; display:none; border-radius: 8px; overflow: hidden;"></div>
                         <p id="scan_result" class="scan-result-text"></p>
-                    </div>
+                    </div>    
                 </div>
+
+
+                 <div class="sort-section card-modern mt-4">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-puzzle-piece"></i> Sort Table</h2>
+                    </div>
+                      <div class="button-group">
+                         <label><i class="fa-solid fa-tag"></i> NAME (A-Z) (DEFAULT)</label>
+                         <input type="radio" id="one" name="sort_table" class="cookie-btn" value="Name" checked>
+                      </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-layer-group"></i> QTY (High->Low)</label>
+                         <input type="radio" id="two" name="sort_table" class="cookie-btn" value="QTY_High">
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-layer-group"></i> QTY (Low->High)</label>
+                         <input type="radio" id="three" name="sort_table" class="cookie-btn" value="QTY_Low">
+                    </div>
+                  </div>
             </aside>
         </div>
     </main>

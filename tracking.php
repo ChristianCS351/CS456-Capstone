@@ -316,6 +316,45 @@ $pantry_items = $stmt->fetchAll();
                         <p id="quick_scan_result" class="scan-result-text"></p>
                     </div>
                 </div>
+
+                <!-- Table Sort Section -->
+                <div class="sort-section card-modern mt-4">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-puzzle-piece"></i> Sort Table</h2>
+                    </div>
+                      <div class="button-group">
+                         <label><i class="fa-solid fa-tag"></i> NAME (A-Z)</label>
+                         <input type="radio" id="one" name="sort_table" class="cookie-btn" value="Name">
+                      </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-layer-group"></i> QTY (High->Low)</label>
+                         <input type="radio" id="two" name="sort_table" class="cookie-btn" value="QTY_High">
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-layer-group"></i> QTY (Low->High)</label>
+                         <input type="radio" id="three" name="sort_table" class="cookie-btn" value="QTY_Low">
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-calendar-alt"></i> EXPIRATION (MOST RECENT)</label>
+                         <input type="radio" id="four" name="sort_table" class="cookie-btn" value="EXP_Mrec">
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-calendar-alt"></i> EXPIRATION (LEAST RECENT)</label>
+                         <input type="radio" id="five" name="sort_table" class="cookie-btn" value="EXP_Lrec">
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-map-marker-alt"></i> LOCATION (A-Z)</label>
+                         <input type="radio" id="six" name="sort_table" class="cookie-btn" value="Location">
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-shapes"></i> CATEGORY (A-Z)</label>
+                         <input type="radio" id="seven" name="sort_table" class="cookie-btn" value="Action">
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-paper-plane"></i> WHEN ADDED (DEFAULT)</label>
+                         <input type="radio" id="eight" name="sort_table" class="cookie-btn" value="Def" checked>
+                    </div>
+                </div>
             </aside>
         </div>
     </main>

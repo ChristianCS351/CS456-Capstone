@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us & Contact - Pantry Pilot</title>
+    <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
     
     <!-- Meta tags for SEO best practices -->
     <meta name="description" content="Learn more about Pantry Pilot, your ultimate grocery and pantry management tool. Contact us for support or inquiries.">
@@ -169,6 +170,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </button>
                         <div class="accordion-content">
                             <p>Yes! The core features of Pantry Pilot are completely free to use to help you reduce food waste.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header">
+                            Can I sort my tables? <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p>Yes! The sorting feature allows you to sort your tables in many various ways, just click the cookie to change the table's sorting conditions.</p>
                         </div>
                     </div>
                 </div>

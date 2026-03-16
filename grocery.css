@@ -428,6 +428,92 @@ body {
     color: var(--primary-color);
 }
 
+
+/* =========== TABLE OPTIONS ========== */
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 20px;
+    gap: 25px;
+}
+
+.button-group label {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: rgb(145, 123, 83);
+    display: flex;
+    margin-left: 50px;
+    text-align: center;
+    align-items: center;
+    gap: 25px;
+}
+
+   .cookie-btn {
+            background-color: #ffffff;
+            color: #ffffff;
+            border: 2px solid #000000;
+            font-weight: bold;
+            gap: 30px;
+            margin-left: 30px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0px 18px rgb(255, 255, 255);
+            text-align: center;
+            border-radius: 8px;
+        }
+        /* Source:I used this source to learn how to do radio buttons https://stackoverflow.com/questions/4253920/how-do-i-change-the-color-of-radio-buttons */
+        input[type='radio']:before {
+        content: '';
+        font-size: 30px;
+        width: 28px;
+        height: 28px;
+        border-radius: 10px;
+        top: -17px;
+        left: 11px;
+        position: relative;
+        display: inline-block;
+        visibility: visible;
+        border: 1.5px solid rgb(255, 255, 255);
+        background-color:#ffffff;
+        box-shadow: 0 4px 18px rgb(255, 255, 255);
+    }
+        input[type='radio']:after {
+        content: '🍪';
+        font-size: 25px;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        top: -55px;
+        left: -197px;
+        position: relative;
+        display: inline-block;
+        visibility: visible;
+        border: 1.5px solid rgb(255, 255, 255);
+        background-color:#ffffff;
+        box-shadow: 0 4px 18px rgb(255, 255, 255);
+    }
+
+    input[type='radio']:checked:after {
+       content: '✔️';
+       color: transparent;
+       top: -55px;
+       left: -197px;  
+       text-shadow: 0 0 0 rgb(70, 69, 49);
+       font-size: 25px;
+       line-height: 1.7;
+       padding-right: 10px;
+}
+       
+      
+
+        .cookie-btn:hover {
+            background-color: #363528;
+            color: #ffffff;
+        }
+
 /* =========== FOOTER =========== */
 footer {
     background: white;
