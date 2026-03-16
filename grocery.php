@@ -12,11 +12,13 @@ if ($conn->connect_error) {
     die("DB Connection Failed: " . $conn->connect_error);
 }
 
+$shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'shop_list';
+
 $messageList = "";
 
 /* ------------------ CLEAR LIST (DELETE ALL) ------------------ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clear_list'])) {
-    $conn->query("DELETE FROM shop_list");
+    $conn->query("DELETE FROM `$shop_table`");
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['list'])) {
     $quantity = (int)$_POST['qty'];
 
     if ($name !== "" && $quantity > 0) {
-        $stmt = $conn->prepare("INSERT INTO shop_list (name, quantity) VALUES (?, ?)");
+        $stmt = $conn->prepare("INSERT INTO `$shop_table` (name, quantity) VALUES (?, ?)");
         $stmt->bind_param("si", $name, $quantity);
 
         if ($stmt->execute()) {
@@ -44,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['list'])) {
 
 // FETCH CURRENT SHOPPING LIST
 $listItems = [];
-$result = $conn->query("SELECT id, name, quantity FROM shop_list ORDER BY id ASC");
+$result = $conn->query("SELECT id, name, quantity FROM `$shop_table` ORDER BY id ASC");
 if ($result) {
     while ($row = $result->fetch_assoc()) {
         $listItems[] = $row;

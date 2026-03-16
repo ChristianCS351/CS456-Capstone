@@ -117,9 +117,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('trackingtop.jpg') no-repeat center center;
-    background-size: cover;
-    filter: blur(2px);
+    background: var(--primary-color);
     z-index: 1;
 }
 

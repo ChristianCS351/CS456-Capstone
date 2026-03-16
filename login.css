@@ -22,8 +22,7 @@
 body.login-page {
     font-family: var(--font-family);
     color: var(--text-main);
-    background: url('loginabackground.jpg') no-repeat center center fixed;
-    background-size: cover;
+    background: var(--primary-dark);
     min-height: 100vh;
     overflow-x: hidden;
     line-height: 1.6;
