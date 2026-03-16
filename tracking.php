@@ -1,5 +1,8 @@
 <?php
+session_start();
 $host = 'localhost';
+$pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
+$shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'shop_list';
 $dbname = 'pantry';
 $user = 'root';
 $pass = 'mysql';
@@ -23,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['check_barcode'])) {
     $barcode = $_GET['check_barcode'];
     
     // First, check if it's currently in the pantry
-    $stmt = $pdo->prepare("SELECT id, name FROM foods WHERE barcode = :barcode OR id = :id_barcode LIMIT 1");
+    $stmt = $pdo->prepare("SELECT id, name FROM `$pantry_table` WHERE barcode = :barcode OR id = :id_barcode LIMIT 1");
     $stmt->execute([
         ':barcode' => $barcode,
         ':id_barcode' => $barcode
@@ -51,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['check_barcode'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = (int)$_POST['delete_id'];
-    $stmt = $pdo->prepare("DELETE FROM foods WHERE id = :id");
+    $stmt = $pdo->prepare("DELETE FROM `$pantry_table` WHERE id = :id");
     $stmt->execute([':id' => $delete_id]);
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
@@ -60,17 +63,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 /* ------------------ ADD ITEM TO SHOPPING LIST ------------------ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shop_id'])) {
     $shop_id = (int)$_POST['shop_id'];
-    $stmt = $pdo->prepare("SELECT name, quantity, barcode FROM foods WHERE id = :id");
+    $stmt = $pdo->prepare("SELECT name, quantity, barcode FROM `$pantry_table` WHERE id = :id");
     $stmt->execute([':id' => $shop_id]);
     $item = $stmt->fetch();
 
     if ($item) {
-        $check = $pdo->prepare("SELECT COUNT(*) FROM shop_list WHERE name = :name");
+        $check = $pdo->prepare("SELECT COUNT(*) FROM `$shop_table` WHERE name = :name");
         $check->execute([':name' => $item['name']]);
         $exists = $check->fetchColumn();
 
         if ($exists == 0) {
-            $stmt2 = $pdo->prepare("INSERT INTO shop_list (name, quantity, barcode) VALUES (:name, :quantity, :barcode)");
+            $stmt2 = $pdo->prepare("INSERT INTO `$shop_table` (name, quantity, barcode) VALUES (:name, :quantity, :barcode)");
             $stmt2->execute([
                 ':name'     => $item['name'],
                 ':quantity' => $item['quantity'],
@@ -87,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['quick_update_item']))
     $barcode = $_POST['update_barcode'];
     $expiration_date = trim($_POST['update_expiration_date']);
     
-    $stmt = $pdo->prepare("UPDATE foods SET quantity = quantity + 1, expiration_date = :expiration_date WHERE barcode = :barcode OR id = :id_barcode");
+    $stmt = $pdo->prepare("UPDATE `$pantry_table` SET quantity = quantity + 1, expiration_date = :expiration_date WHERE barcode = :barcode OR id = :id_barcode");
     $stmt->execute([
         ':expiration_date' => $expiration_date,
         ':barcode' => $barcode,
@@ -122,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
                 ':dairy' => $dairy
             ]);
             
-            $stmt = $pdo->prepare("INSERT INTO foods (id, name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode) 
+            $stmt = $pdo->prepare("INSERT INTO `$pantry_table` (id, name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode) 
                                    VALUES (:id, :name, :expiration_date, :quantity, :location, :dairy, :open_date, :open_expiration_date, :barcode)
                                    ON DUPLICATE KEY UPDATE quantity = quantity + :update_quantity");
             $stmt->execute([
@@ -139,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
             ]);
         } else {
             // Let ID Auto Increment
-            $stmt = $pdo->prepare("INSERT INTO foods (name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode) 
+            $stmt = $pdo->prepare("INSERT INTO `$pantry_table` (name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode) 
                                    VALUES (:name, :expiration_date, :quantity, :location, :dairy, :open_date, :open_expiration_date, :barcode)");
             $stmt->execute([
                 ':name' => $name,
@@ -159,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
 }
 
 /* ------------------ FETCH PANTRY ITEMS ------------------ */
-$stmt = $pdo->query("SELECT id, name, quantity, expiration_date, location FROM foods");
+$stmt = $pdo->query("SELECT id, name, quantity, expiration_date, location FROM `$pantry_table`");
 $pantry_items = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>

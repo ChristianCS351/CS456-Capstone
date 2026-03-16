@@ -1,4 +1,5 @@
 <?php
+session_start();
 // ---------- DATABASE CONNECTION ----------
 $host = 'localhost';
 $dbname = 'pantry';
@@ -20,6 +21,9 @@ try {
 }
 
 // ---------------------------------------------------------------------------
+$pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
+$shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'shop_list';
+
 // EXPIRING SOON LIMIT (default 5 → expand to 10)
 $exp_limit = 5;
 if (isset($_GET['exp']) && $_GET['exp'] == 10) {
@@ -27,7 +31,7 @@ if (isset($_GET['exp']) && $_GET['exp'] == 10) {
 }
 
 $expiringStmt = $pdo->prepare("SELECT name, expiration_date, quantity 
-                               FROM foods 
+                               FROM `$pantry_table` 
                                ORDER BY expiration_date ASC 
                                LIMIT :lim");
 $expiringStmt->bindValue(':lim', (int)$exp_limit, PDO::PARAM_INT);
@@ -42,7 +46,7 @@ if (isset($_GET['gro']) && $_GET['gro'] == 10) {
 }
 
 $groceryStmt = $pdo->prepare("SELECT name, quantity, barcode 
-                              FROM shop_list 
+                              FROM `$shop_table` 
                               ORDER BY id ASC 
                               LIMIT :lim");
 $groceryStmt->bindValue(':lim', (int)$g_limit, PDO::PARAM_INT);

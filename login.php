@@ -35,8 +35,9 @@ if (isset($_POST['login'])) {
         $_SESSION['user_id'] = $id;
 
         // pantry table name (kept from your original logic)
-        $cleanUsername = preg_replace("/[^a-zA-Z0-9]/", "_", strtolower($username));
+        $cleanUsername = preg_replace("/[^a-zA-Z0-9_]/", "", strtolower($username));
         $_SESSION['pantry_table'] = $cleanUsername . "_pantry";
+        $_SESSION['shop_table'] = $cleanUsername . "_shop";
 
         header("Location: AccountInfo.php");
         exit;
@@ -64,13 +65,17 @@ if (isset($_POST['register'])) {
     $stmt->bind_param("sssss", $username, $hash, $email, $full_name, $phone);
 
     if ($stmt->execute()) {
-        $pantryTable = $username . "_pantry";
+        $cleanUsername = preg_replace("/[^a-zA-Z0-9_]/", "", strtolower($username));
+        $pantryTable = $cleanUsername . "_pantry";
+        $shopTable = $cleanUsername . "_shop";
 
-        $createSql = "CREATE TABLE $pantryTable LIKE foods";
-        if ($conn->query($createSql) === TRUE) {
+        $createPantrySql = "CREATE TABLE IF NOT EXISTS `$pantryTable` LIKE foods";
+        $createShopSql = "CREATE TABLE IF NOT EXISTS `$shopTable` LIKE shop_list";
+        
+        if ($conn->query($createPantrySql) === TRUE && $conn->query($createShopSql) === TRUE) {
             $messageRegister = "Your Account was created :D. Log in and pantry my friend!";
         } else {
-            $messageRegister = "User created, but error creating pantry :( " . $conn->error;
+            $messageRegister = "User created, but error creating tables :( " . $conn->error;
         }
     } else {
         $messageRegister = "Error: Username may already exist.";
