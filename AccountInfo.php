@@ -76,7 +76,7 @@ if ($result && $result->num_rows > 0) {
             </div>
             <div class="nav-right">
                 <a href="AccountInfo.php" class="active">Account Info</a>
-                <a href="logout.php" class="btn-login"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+                <a href="#" onclick="handleOut(); return false;" class="btn-login"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
             </div>
         </div>
     </nav>

@@ -305,7 +305,7 @@ tr:nth-child(even) td {
     padding: 12px 10px;
     font-size: 0.9rem;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: #ffffff;
     font-weight: 600;
     border-bottom: 2px solid var(--border-color);
 }

@@ -130,7 +130,14 @@ function initializeScanner(btnId, readerId, resultId, targetInputId = null) {
 
             scanResult.textContent = "Point camera at barcode...";
         } catch (err) {
-            scanResult.textContent = "Camera error: " + err;
+            let errorMsg = err;
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                errorMsg = "Browser blocked camera access. HTTPS is required on mobile devices.";
+            } else if (err.toString().includes("NotAllowedError") || err.toString().includes("Permission denied")) {
+                errorMsg = "Camera permission was denied. Please allow access in your browser settings.";
+            }
+
+            scanResult.innerHTML = `<span style="color: #dc2626; font-size: 0.85rem; font-weight: 500;">Camera error: ${errorMsg}</span>`;
             scanBtn.innerHTML = `<i class="fa-solid fa-camera"></i> Scan`;
             reader.style.display = "none";
             activeScannerId = null;
