@@ -78,7 +78,7 @@ $groceryItems = $groceryStmt->fetchAll();
         <div class="nav-container">
             <div class="nav-left">
                 <a href="index.php" class="nav-brand">
-                    <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+                    <img src="PantryPilotlogo2.png" style="height: 50px;">
                 </a>
                 <a href="index.php" class="active">Home</a>
                 <a href="tracking.php">Pantry</a>
@@ -197,16 +197,6 @@ $groceryItems = $groceryStmt->fetchAll();
             </section>
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">
-                <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
-            </div>
-            <p>&copy; 2026 Pantry Pilot. All rights reserved.</p>
-        </div>
-    </footer>
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
