@@ -67,7 +67,7 @@ if ($result && $result->num_rows > 0) {
         <div class="nav-container">
             <div class="nav-left">
                 <a href="index.php" class="nav-brand">
-                    <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
+                    <img src="PantryPilotlogo2.png" style="height: 50px;">
                 </a>
                 <a href="index.php">Home</a>
                 <a href="tracking.php">Pantry</a>
@@ -160,16 +160,6 @@ if ($result && $result->num_rows > 0) {
 
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">
-                <i class="fa-solid fa-plane-departure"></i> Pantry Pilot
-            </div>
-            <p>&copy; 2026 Pantry Pilot. All rights reserved.</p>
-        </div>
-    </footer>
 
     <!-- Optional Scripts -->
     <script src="app.js"></script>
