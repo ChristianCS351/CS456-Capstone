@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="nav-container">
             <div class="nav-left">
                 <a href="index.php" class="nav-brand">
-                    <img src="PantryPilotlogo2.png" style="height: 50px;">
+                    <img src="PantryPilotlogo2.png" style="height: 50px; ">
                 </a>
                 <a href="index.php">Home</a>
                 <a href="tracking.php">Pantry</a>
