@@ -74,9 +74,13 @@ if ($result && $result->num_rows > 0) {
                 <a href="grocery.php">Shopping List</a>
                 <a href="about.php">About & Help</a>
             </div>
-            <div class="nav-right">
-                <a href="AccountInfo.php" class="active">Account Info</a>
-                <a href="#" onclick="handleOut(); return false;" class="btn-login"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+             <div class="nav-right">
+                <a href="AccountInfo.php">Account Info</a>
+                <a href="login.php" class="btn-login">Login</a>
+                <a href="delete.php" class="btn-delete">Delete</a>
+            </div>
+            <div class="nav-end">
+                <a href="settings.php" class="btn-settings"><i class="fa-solid fa-gear" style=" color: rgb(141, 141, 141)"></i></a>
             </div>
         </div>
     </nav>

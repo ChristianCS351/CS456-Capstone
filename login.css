@@ -107,10 +107,34 @@ body.login-page::before {
     font-weight: 600 !important;
 }
 
-.btn-login:hover {
+.btn-login:hover,
+.btn-login.active 
+ {
     background: var(--primary-dark) !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+}
+
+.btn-delete {
+    background: #b31717 !important;
+    color: white !important;
+    padding: 8px 24px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+}
+
+.btn-delete:hover {
+    background: #6d1010 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+}
+
+.btn-settings i {
+    font-size: 1.6rem;
+}
+
+.btn-settings i:hover {
+    background: rgba(27, 94, 32, 0.05);
 }
 
 /* =========== GLASS CONTAINERS =========== */

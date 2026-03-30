@@ -113,9 +113,13 @@ if (isset($_POST['register'])) {
                 <a href="grocery.php">Shopping List</a>
                 <a href="about.php">About & Help</a>
             </div>
-            <div class="nav-right">
+             <div class="nav-right">
                 <a href="AccountInfo.php">Account Info</a>
-                <a href="login.php" class="btn-login active">Login</a>
+                <a href="login.php" class="btn-login">Login</a>
+                <a href="delete.php" class="btn-delete">Delete</a>
+            </div>
+            <div class="nav-end">
+                <a href="settings.php" class="btn-settings"><i class="fa-solid fa-gear" style=" color: rgb(141, 141, 141)"></i></a>
             </div>
         </div>
     </nav>
