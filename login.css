@@ -168,6 +168,10 @@ body.login-page::before {
     margin-bottom: 8px;
 }
 
+.box-header h2:hover {
+    transform: scale(1.02);
+}
+
 .box-header h2 i {
     color: var(--primary-light);
 }
@@ -210,6 +214,15 @@ body.login-page::before {
     font-size: 1rem;
     outline: none;
     transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+
+    
+}
+
+.input-group input :hover{
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+
 }
 
 .input-group input:focus {
