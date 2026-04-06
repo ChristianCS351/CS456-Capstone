@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us & Contact - Pantry Pilot</title>
-    <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
+    <link rel="icon" type="image/x-icon" href="favicon-32x32.png">
     
     <!-- Meta tags for SEO best practices -->
     <meta name="description" content="Learn more about Pantry Pilot, your ultimate grocery and pantry management tool. Contact us for support or inquiries.">

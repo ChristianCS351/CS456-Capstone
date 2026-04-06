@@ -60,7 +60,7 @@ if ($result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping List - Pantry Pilot</title>
-    <link rel="icon" type="image/x-icon" href="faviconPP.ico.jpg">
+    <link rel="icon" type="image/x-icon" href="favicon-32x32.png">
 
     <!-- Modern Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
