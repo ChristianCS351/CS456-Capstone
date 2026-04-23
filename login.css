@@ -100,8 +100,10 @@ body.login-page::before {
 }
 
 .btn-login {
-    background: var(--primary-color) !important;
+    background: var(--primary-dark) !important;
     color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
     padding: 8px 24px !important;
     border-radius: 50px !important;
     font-weight: 600 !important;

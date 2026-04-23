@@ -15,6 +15,12 @@ if ($conn->connect_error) {
     die("DB Connection Failed: " . $conn->connect_error);
 }
 
+// Prevent access if user is logged in
+if (isset($_SESSION['user_id'])) {
+    header("Location: AccountInfo.php");
+    exit;
+}
+
 $messageLogin = "";
 $messageRegister = "";
 

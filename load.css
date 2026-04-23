@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-light-head: #ffdf74;;
+}
+/* I found a useful loading screen template and I made my own adjustments to it to make the grocery theme to our website. 
+This loading screen is a representation of what our website would look like in terms of an app as most apps always have the intial start and loading screen to it.
+Source: https://css-loaders.com/wobbling/ */
+
+.loader {
+  width: 350px;
+  margin: 180px auto;
+  height: 100px;
+  border-radius: 90px;
+  box-shadow: 0 5px 12px rgba(27, 94, 32, 0.3);
+  animation: fadeInUp 1s ease;
+
+  background:
+   radial-gradient(farthest-side,rgb(230, 46, 46) 94%,#0000) left/60px 60px no-repeat
+   rgb(117, 152, 163);
+  animation: l2 2s infinite linear;
+}
+@keyframes l2 {
+    50% {background-position:right }
+}
+
+.hero-logo{
+    height: 300px;
+    width: 430px;
+    margin-left: 855px;
+    margin-top: 50px;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+    transition: transform 0.2s ease;
+    
+}
+
+.hero-logo:hover {
+    transform: scale(1.05);
+}
+
+.home-page {
+    background: linear-gradient(90deg, #86bf78, var(--primary-light-head));
+}
+
+.box {
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 70px;
+    color: rgba(47, 81, 39, 0.747);
+    -webkit-text-stroke: 1px rgba(229, 212, 27, 0.678);
+}
+
+/* Useful Fade In animation website I found:
+https://www.html-code-generator.com/css/animations/fade */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+
+
+.fadeIn {
+    animation: fadeIn 5s ease-in; 
+}
+
+.fadeOut {
+    animation: fadeOut 11s ease-in; 
+}
+

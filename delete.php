@@ -92,7 +92,7 @@ function getDateClass($date) {
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="account.css">
+    <link rel="stylesheet" href="delete.css">
 </head>
 
 <body class="account-page">
@@ -125,7 +125,7 @@ function getDateClass($date) {
         <div class="mini-hero-bg"></div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1><i class="fa-solid fa-user-circle"></i> Account Profile</h1>
+            <h1><i class="fa-solid fa-user-circle"></i> Delete Profile</h1>
             <p>Welcome back, <?php echo htmlspecialchars($userInfo['full_name']); ?>.</p>
         </div>
     </header>
@@ -137,34 +137,13 @@ function getDateClass($date) {
             <div class="container card-modern">
                 <div class="card-header">
                     <div class="card-header">
-                    <h2><i class="fa-solid fa-address-card"></i> Personal Information</h2>
+                    <h2><i class="fa-solid fa-address-card" style="color: #d00000" ></i> Delete</h2>
                 </div>
-                
-                <div class="card-body">
-                    <div class="info-list">
-                        <div class="info-item">
-                            <span class="info-label"><i class="fa-solid fa-user-tag"></i> Username:</span>
-                            <span class="info-value"><?php echo htmlspecialchars($userInfo['username']); ?></span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label"><i class="fa-solid fa-id-card"></i> Full Name:</span>
-                            <span class="info-value"><?php echo htmlspecialchars($userInfo['full_name']); ?></span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label"><i class="fa-solid fa-envelope"></i> Email:</span>
-                            <span class="info-value"><?php echo htmlspecialchars($userInfo['email']); ?></span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label"><i class="fa-solid fa-phone"></i> Phone:</span>
-                            <span class="info-value"><?php echo htmlspecialchars($userInfo['phone']); ?></span>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Note: For demo purposes, we direct logout to login.php. Normally this calls logout.php -->
                      <form method="POST" id="clear_form">
-                        <button type="button" href="login.php" class="btn-action btn-danger d-block mt-4 text-center" class="logout-btn" onclick=handleOut()>
-                        <i class="fa-solid fa-person-walking-arrow-right"></i>Secure Logout 
+                        <button type="button" href="login.php" class="btn-action btn-danger d-block mt-4 text-center" class="logout-btn" onclick=deleteOut()>
+                        <i class="fa-solid fa-bomb"></i>Delete Account
                      </form>
                 </div>
             </div>
@@ -173,40 +152,13 @@ function getDateClass($date) {
             <div class="pantry-box card-modern">
                 <div class="card-header">
                     <div class="card-header">
-                    <h2><i class="fa-solid fa-bell" style="color:#f59e0b"></i> Action Required</h2>
+                    <h2><i class="fa-notdog fa-solid fa-xmark" style="color:red"></i> IMPORTANT CONSIDERATIONS</h2>
                 </div>
                 
                 <div class="card-body">
-                    <p class="text-muted mb-3"><i class="fa-solid fa-info-circle"></i> The following items in your pantry are expiring in the next 7 days:</p>
-                    <div class="table-responsive">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Expiration Date</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <p class="text-muted mb-3"><i class="fa-solid fa-info-circle"></i> Note you will lose all things:<br><br> 
+                    1. Lose all pantry storage and grocery lists permanently.<br> 2. Lose your grocery list stored history.<br> 3. Lose you account information from the website.</p>
 
-                         <div class="alerts-list">
-                            <?php if (count($expiringFoods) > 0): ?>
-                                <?php foreach ($expiringFoods as $food): ?>
-                                    <tr>
-                                        <td><strong><?= htmlspecialchars($food['name']) ?></strong></td>
-                                        <td class="<?= getDateClass($food['expiration_date']) ?>"><?= htmlspecialchars($food['expiration_date']) ?></td>
-                                        <td><?= htmlspecialchars($food['quantity']) ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <div class="alert-success-box text-center">
-                                    <i class="fa-solid fa-check-circle fa-3x" style="color: #4caf50; display:block; margin-bottom: 10px;"></i>
-                                    <p style="font-weight: 600; color: #1b5e20;">All Good!</p>
-                                    <p style="font-size: 0.9rem; color: #1b5e20;">No items are expiring soon.</p>
-                                </div>
-                            <?php endif; ?>
-                        </tbody>
-                        </table>
                 </div>
             </div>
             </div>
@@ -215,6 +167,6 @@ function getDateClass($date) {
 
     <!-- Optional Scripts -->
     <script src="app.js"></script>
-    <script src="account.js"></script>
+    <script src="delete.js"></script>
 </body>
 </html>

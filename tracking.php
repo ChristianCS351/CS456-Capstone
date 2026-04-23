@@ -1,170 +1,270 @@
 <?php
 session_start();
+
+/* ------------------ DB CONFIG ------------------ */
 $host = 'localhost';
-$pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
-$shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'shop_list';
-$dbname = 'pantry';
+$db   = 'pantry';
 $user = 'root';
 $pass = 'mysql';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    die("DB Connection Failed: " . $e->getMessage());
 }
 
+/* ------------------ TABLES ------------------ */
+$pantry_table = $_SESSION['pantry_table'] ?? 'foods';
+$shop_table   = $_SESSION['shop_table'] ?? 'shop_list';
 
+function safeTable($name) {
+    return preg_match('/^[a-zA-Z0-9_]+$/', $name) ? $name : 'foods';
+}
+$pantry_table = safeTable($pantry_table);
+$shop_table   = safeTable($shop_table);
+
+function redirect() {
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
+/* ============================================================
+   CHECK BARCODE
+============================================================ */
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['check_barcode'])) {
-    $barcode = $_GET['check_barcode'];
-    
-    // First, check if it's currently in the pantry
-    $stmt = $pdo->prepare("SELECT id, name FROM `$pantry_table` WHERE barcode = :barcode OR id = :id_barcode LIMIT 1");
-    $stmt->execute([
-        ':barcode' => $barcode,
-        ':id_barcode' => $barcode
-    ]);
+
+    $barcode = trim($_GET['check_barcode']);
+
+    $stmt = $pdo->prepare("
+        SELECT name 
+        FROM `$pantry_table`
+        WHERE barcode = ? OR id = ?
+        LIMIT 1
+    ");
+    $stmt->execute([$barcode, $barcode]);
     $item = $stmt->fetch();
-    
+
     header('Content-Type: application/json');
+
     if ($item) {
-        // Exists in current pantry
         echo json_encode(['exists' => true, 'name' => $item['name']]);
     } else {
-        // Doesn't exist in pantry, check history table for auto-fill data
-        $hist_stmt = $pdo->prepare("SELECT name, dairy FROM food_history WHERE barcode = :barcode LIMIT 1");
-        $hist_stmt->execute([':barcode' => $barcode]);
-        $history = $hist_stmt->fetch();
-        
-        if ($history) {
-            echo json_encode(['exists' => false, 'history_name' => $history['name'], 'history_dairy' => $history['dairy']]);
-        } else {
-            echo json_encode(['exists' => false]);
-        }
+        $hist = $pdo->prepare("
+            SELECT name, category 
+            FROM food_history 
+            WHERE barcode = ? 
+            LIMIT 1
+        ");
+        $hist->execute([$barcode]);
+        $h = $hist->fetch();
+
+        echo json_encode($h
+            ? ['exists' => false, 'history_name' => $h['name'], 'history_category' => $h['category']]
+            : ['exists' => false]
+        );
     }
     exit;
 }
 
+
+$sort = isset($_GET['sort_table']) ? $_GET['sort_table'] : 'when_add';
+
+switch ($sort) {
+     case 'qty_desc':
+        $orderBy = "quantity DESC";
+        break;
+     case 'qty_asc':
+        $orderBy = "quantity ASC";
+        break;
+     case 'name_desc':
+        $orderBy = "name DESC";
+        break;
+     case 'name_asc':
+        $orderBy = "name ASC";
+        break;
+     case 'exp_desc':
+        $orderBy = "expiration_date DESC";
+        break;
+     case 'exp_asc':
+        $orderBy = "expiration_date ASC";
+        break;
+     case 'open_desc':
+        $orderBy = "open_date DESC";
+        break;
+     case 'open_asc':
+        $orderBy = "open_date ASC";
+        break;
+     case 'loc_desc':
+        $orderBy = "location DESC";
+        break;
+     case 'loc_asc':
+        $orderBy = "location ASC";
+        break;
+     case 'cat_desc':
+        $orderBy = "category DESC";
+        break;
+     case 'cat_asc':
+        $orderBy = "category ASC";
+        break;
+     default:
+        $orderBy = "id DESC";
+        break;
+}
+$stmt = $pdo->query("SELECT id, name, quantity FROM `$pantry_table` ORDER BY $orderBy");
+$shop_items = $stmt->fetchAll();
+
+
+/* ============================================================
+   DELETE ITEM
+============================================================ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
-    $delete_id = (int)$_POST['delete_id'];
-    $stmt = $pdo->prepare("DELETE FROM `$pantry_table` WHERE id = :id");
-    $stmt->execute([':id' => $delete_id]);
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
+    $pdo->prepare("DELETE FROM `$pantry_table` WHERE id = ?")
+        ->execute([(int)$_POST['delete_id']]);
+    redirect();
 }
 
-/* ------------------ ADD ITEM TO SHOPPING LIST ------------------ */
+/* ============================================================
+   ADD TO SHOPPING LIST
+============================================================ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shop_id'])) {
-    $shop_id = (int)$_POST['shop_id'];
-    $stmt = $pdo->prepare("SELECT name, quantity, barcode FROM `$pantry_table` WHERE id = :id");
-    $stmt->execute([':id' => $shop_id]);
+
+    $stmt = $pdo->prepare("
+        SELECT name, quantity, barcode 
+        FROM `$pantry_table` 
+        WHERE id = ?
+    ");
+    $stmt->execute([(int)$_POST['shop_id']]);
     $item = $stmt->fetch();
 
     if ($item) {
-        $check = $pdo->prepare("SELECT COUNT(*) FROM `$shop_table` WHERE name = :name");
-        $check->execute([':name' => $item['name']]);
-        $exists = $check->fetchColumn();
+        $check = $pdo->prepare("SELECT COUNT(*) FROM `$shop_table` WHERE name = ?");
+        $check->execute([$item['name']]);
 
-        if ($exists == 0) {
-            $stmt2 = $pdo->prepare("INSERT INTO `$shop_table` (name, quantity, barcode) VALUES (:name, :quantity, :barcode)");
-            $stmt2->execute([
-                ':name'     => $item['name'],
-                ':quantity' => $item['quantity'],
-                ':barcode'  => $item['barcode']
+        if (!$check->fetchColumn()) {
+            $pdo->prepare("
+                INSERT INTO `$shop_table` (name, quantity, barcode)
+                VALUES (?, ?, ?)
+            ")->execute([
+                $item['name'],
+                $item['quantity'],
+                $item['barcode']
             ]);
         }
     }
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
+    redirect();
 }
 
 
+
+function getDateClass($date) {
+    if (!$date) return '';
+    $today = new DateTime();
+    $target = new DateTime($date);
+    $diff = (int)$today->diff($target)->format('%r%a'); 
+    
+    if ($diff < -5) return 'expired-dark';   // > 5 days expired
+    if ($diff < 0)  return 'expired';        // expired within 5 days
+    if ($diff < 7) return 'expiring';       // within 7 days
+
+    return 'normal';
+}
+
+/* ============================================================
+   QUICK UPDATE (SCAN AGAIN)
+============================================================ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['quick_update_item'])) {
-    $barcode = $_POST['update_barcode'];
-    $expiration_date = trim($_POST['update_expiration_date']);
-    
-    $stmt = $pdo->prepare("UPDATE `$pantry_table` SET quantity = quantity + 1, expiration_date = :expiration_date WHERE barcode = :barcode OR id = :id_barcode");
-    $stmt->execute([
-        ':expiration_date' => $expiration_date,
-        ':barcode' => $barcode,
-        ':id_barcode' => $barcode
+
+    $pdo->prepare("
+        UPDATE `$pantry_table`
+        SET quantity = quantity + 1,
+            expiration_date = ?
+        WHERE barcode = ? OR id = ?
+    ")->execute([
+        $_POST['update_expiration_date'],
+        $_POST['update_barcode'],
+        $_POST['update_barcode']
     ]);
-    
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
+
+    redirect();
 }
 
-/* ------------------ INSERT NEW ITEM ------------------ */
+/* ============================================================
+   ADD ITEM
+============================================================ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
-    $name = trim($_POST['name']);
-    $expiration_date = trim($_POST['expiration_date']);
-    $location = trim($_POST['location']);
-    $dairy = trim($_POST['dairy']);
-    $quantity = (int)$_POST['quantity'];
-    $barcode = isset($_POST['barcode']) ? trim($_POST['barcode']) : null;
-    if ($barcode === '') { $barcode = null; }
 
-    if (empty($name) || empty($expiration_date) || empty($location) || $quantity <= 0) {
-        echo "<script>alert('Please fill in all required fields correctly before submitting.');</script>";
+    $name     = trim($_POST['name']);
+    $exp      = trim($_POST['expiration_date']);
+    $open      = trim($_POST['open_date']);
+    $location = trim($_POST['location']);
+    $category = trim($_POST['category']);
+    $qty      = (int)$_POST['quantity'];
+    $barcode  = trim($_POST['barcode'] ?? '') ?: null;
+
+    if (!$name || !$exp || !$location || !$category || $qty <= 0) {
+        echo "<script>alert('Fill all required fields');</script>";
     } else {
+
         $today = date('Y-m-d');
-        
+
         if ($barcode) {
-            // Because user wants Barcode to be Primary Key, we must also save this item to the food_history table
-            $hist_stmt = $pdo->prepare("INSERT IGNORE INTO food_history (barcode, name, dairy) VALUES (:barcode, :name, :dairy)");
-            $hist_stmt->execute([
-                ':barcode' => $barcode,
-                ':name' => $name,
-                ':dairy' => $dairy
+
+            // Save history (UPDATED: category instead of dairy)
+            $pdo->prepare("
+                INSERT IGNORE INTO food_history (barcode, name, category)
+                VALUES (?, ?, ?)
+            ")->execute([$barcode, $name, $category]);
+
+            // Insert or update
+            $pdo->prepare("
+                INSERT INTO `$pantry_table`
+                (id, name, expiration_date, open_date, location, category, quantity, barcode)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity)
+            ")->execute([
+                $barcode,
+                $name,
+                $exp,
+                $open,
+                $location,
+                $category,
+                $qty,
+                $barcode
             ]);
-            
-            $stmt = $pdo->prepare("INSERT INTO `$pantry_table` (id, name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode) 
-                                   VALUES (:id, :name, :expiration_date, :quantity, :location, :dairy, :open_date, :open_expiration_date, :barcode)
-                                   ON DUPLICATE KEY UPDATE quantity = quantity + :update_quantity");
-            $stmt->execute([
-                ':id' => $barcode,
-                ':name' => $name,
-                ':expiration_date' => $expiration_date,
-                ':quantity' => $quantity,
-                ':location' => $location,
-                ':dairy' => $dairy,
-                ':open_date' => $today,
-                ':open_expiration_date' => date('Y-m-d', strtotime('+1 year')),
-                ':barcode' => $barcode,
-                ':update_quantity' => $quantity
-            ]);
+
         } else {
-            // Let ID Auto Increment
-            $stmt = $pdo->prepare("INSERT INTO `$pantry_table` (name, expiration_date, quantity, location, dairy, open_date, open_expiration_date, barcode) 
-                                   VALUES (:name, :expiration_date, :quantity, :location, :dairy, :open_date, :open_expiration_date, :barcode)");
-            $stmt->execute([
-                ':name' => $name,
-                ':expiration_date' => $expiration_date,
-                ':quantity' => $quantity,
-                ':location' => $location,
-                ':dairy' => $dairy,
-                ':open_date' => $today,
-                ':open_expiration_date' => date('Y-m-d', strtotime('+1 year')),
-                ':barcode' => null
+            $pdo->prepare("
+                INSERT INTO `$pantry_table`
+                (name, expiration_date, open_date, location, category, quantity, barcode)
+                VALUES (?, ?, ?, ?, ?, ?, NULL)
+            ")->execute([
+                $name,
+                $exp,
+                $open,
+                $location,
+                $category,
+                $qty
             ]);
         }
 
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit;
+        redirect();
     }
 }
 
-/* ------------------ FETCH PANTRY ITEMS ------------------ */
-$stmt = $pdo->query("SELECT id, name, quantity, expiration_date, location FROM `$pantry_table`");
+/* ============================================================
+   FETCH PANTRY
+============================================================ */
+$stmt = $pdo->query("
+    SELECT id, name, quantity, expiration_date, open_date, location, category
+    FROM `$pantry_table`
+    ORDER BY $orderBy
+");
 $pantry_items = $stmt->fetchAll();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -222,25 +322,34 @@ $pantry_items = $stmt->fetchAll();
                 <div class="card-header">
                     <h2><i class="fa-solid fa-cubes"></i> Current Inventory</h2>
                 </div>
+                <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:10px; font-size:0.9rem;">
+                    <span><span class="normal">●</span> Normal</span>
+                    <span><span class="expiring">●</span> Expiring ≤ 7 days</span>
+                    <span><span class="expired">●</span> Expired ≤ 5 days</span>
+                    <span><span class="expired-dark">●</span> Expired > 5 days</span>
+                </div>
                 <div class="table-responsive">
                     <table class="modern-table">
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>QTY</th>
                                 <th>Expiration</th>
+                                <th>Expiration When Opened</th>
                                 <th>Location</th>
-                                <th class="text-center" colspan="2">Actions</th>
+                                <th>Category</th>
+                                <th class="category-row" colspan="1"> Qty</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (!empty($pantry_items)): ?>
                                 <?php foreach ($pantry_items as $item): ?>
                                     <tr>
-                                        <td><strong><?= htmlspecialchars($item['name']) ?></strong></td>
-                                        <td><span class="badge badge-qty"><?= htmlspecialchars($item['quantity']) ?></span></td>
-                                        <td><?= htmlspecialchars($item['expiration_date']) ?></td>
-                                        <td><span class="badge badge-location"><?= htmlspecialchars($item['location']) ?></span></td>
+                                        <td class="text-center"><strong><?= htmlspecialchars($item['name']) ?></strong></td>
+                                        <td class="<?= getDateClass($item['expiration_date']) ?>"><?= htmlspecialchars($item['expiration_date']) ?></td>
+                                        <td class="<?= getDateClass($item['open_date']) ?>"><?= htmlspecialchars($item['open_date'] ?? '-') ?></td>
+                                        <td class="text-center"><span class="badge badge-location"><?= htmlspecialchars($item['location']) ?></span></td>
+                                        <td class="text-center"><span class="badge badge-location"><?= htmlspecialchars($item['category'] ?? '-') ?></span></td>
+                                        <td class="text-center"><span class="badge badge-qty"><?= htmlspecialchars($item['quantity']) ?></span></td>
                                         <td class="action-cell">
                                             <form method="POST" action="" class="inline-form">
                                                 <input type="hidden" name="delete_id" value="<?= $item['id'] ?>">
@@ -248,7 +357,7 @@ $pantry_items = $stmt->fetchAll();
                                             </form>
                                         </td>
                                         <td class="action-cell">
-                                            <form method="POST" action="" class="inline-form">
+                                            <form method="POST" action="" class="inline-form" colspan="2">
                                                 <input type="hidden" name="shop_id" value="<?= $item['id'] ?>">
                                                 <button type="submit" class="btn-action btn-warning" title="Add to Shopping List"><i class="fa-solid fa-cart-plus"></i> Shop</button>
                                             </form>
@@ -256,7 +365,7 @@ $pantry_items = $stmt->fetchAll();
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <tr><td colspan="6" class="text-center text-muted"><br>No items found in pantry.<br>Use the form on the right to add some!<br><br></td></tr>
+                                <tr><td colspan="7" class="text-center text-muted"><br>No items found in pantry.<br>Use the form on the right to add some!<br><br></td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
@@ -279,6 +388,11 @@ $pantry_items = $stmt->fetchAll();
                             <label><i class="fa-solid fa-calendar-alt"></i> Expiration Date</label>
                             <input type="date" name="expiration_date" required>
                         </div>
+
+                        <div class="input-group">
+                            <label><i class="fa-solid fa-calendar-alt"></i> Expiration Date When Opened</label>
+                            <input type="date" name="open_date" placeholder="Optional: Only If have an open date this should be filled.">
+                        </div>
                         
                         <div class="input-group">
                             <label><i class="fa-solid fa-map-marker-alt"></i> Location</label>
@@ -288,7 +402,7 @@ $pantry_items = $stmt->fetchAll();
                         <div class="grid-2-col">
                             <div class="input-group">
                                 <label><i class="fa-solid fa-shapes"></i> Category</label>
-                                <input type="text" name="dairy" placeholder="Optional">
+                                <input type="text" name="category" placeholder="Optional">
                             </div>
                             <div class="input-group">
                                 <label><i class="fa-solid fa-layer-group"></i> QTY</label>
@@ -326,41 +440,76 @@ $pantry_items = $stmt->fetchAll();
 
                 <!-- Table Sort Section -->
                 <div class="sort-section card-modern mt-4">
+                <form method="GET" id="sortForm">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-puzzle-piece"></i> Sort Table</h2>
                     </div>
                       <div class="button-group">
                          <label><i class="fa-solid fa-tag"></i> NAME (A-Z)</label>
-                         <input type="radio" id="one" name="sort_table" class="cookie-btn" value="Name">
+                         <input type="radio" name="sort_table" class="cookie-btn" value="name_asc"  onchange="this.form.submit()"
+                         <?= ($sort === 'name_asc') ? 'checked' : '' ?>>
+                      </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-tag"></i> NAME (Z-A)</label>
+                         <input type="radio" name="sort_table" class="cookie-btn" value="name_desc"  onchange="this.form.submit()"
+                         <?= ($sort === 'name_desc') ? 'checked' : '' ?>>
                       </div>
                     <div class="button-group">
                          <label><i class="fa-solid fa-layer-group"></i> QTY (High->Low)</label>
-                         <input type="radio" id="two" name="sort_table" class="cookie-btn" value="QTY_High">
+                         <input type="radio" name="sort_table" class="cookie-btn" value="qty_desc" onchange="this.form.submit()"
+                         <?= ($sort === 'qty_desc') ? 'checked' : '' ?>>
                     </div>
                     <div class="button-group">
                          <label><i class="fa-solid fa-layer-group"></i> QTY (Low->High)</label>
-                         <input type="radio" id="three" name="sort_table" class="cookie-btn" value="QTY_Low">
+                         <input type="radio" name="sort_table" class="cookie-btn" value="qty_asc" onchange="this.form.submit()"
+                         <?= ($sort === 'qty_asc') ? 'checked' : '' ?>>
                     </div>
                     <div class="button-group">
-                         <label><i class="fa-solid fa-calendar-alt"></i> EXPIRATION (MOST RECENT)</label>
-                         <input type="radio" id="four" name="sort_table" class="cookie-btn" value="EXP_Mrec">
+                         <label><i class="fa-solid fa-calendar-alt"></i> EXPIRATION (Least RECENT)</label>
+                         <input type="radio" name="sort_table" class="cookie-btn" value="exp_desc" onchange="this.form.submit()"
+                         <?= ($sort === 'exp_desc') ? 'checked' : '' ?>>
                     </div>
                     <div class="button-group">
-                         <label><i class="fa-solid fa-calendar-alt"></i> EXPIRATION (LEAST RECENT)</label>
-                         <input type="radio" id="five" name="sort_table" class="cookie-btn" value="EXP_Lrec">
+                         <label><i class="fa-solid fa-calendar-alt"></i> EXPIRATION (Most RECENT)</label>
+                         <input type="radio" name="sort_table" class="cookie-btn" value="exp_asc" onchange="this.form.submit()"
+                         <?= ($sort === 'exp_asc') ? 'checked' : '' ?>>
+                    </div>
+                     <div class="button-group">
+                         <label><i class="fa-solid fa-calendar-alt"></i> OPENDATE (Least RECENT)</label>
+                         <input type="radio" name="sort_table" class="cookie-btn" value="open_desc" onchange="this.form.submit()"
+                         <?= ($sort === 'open_desc') ? 'checked' : '' ?>>
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-calendar-alt"></i> OPENDATE (Most RECENT)</label>
+                         <input type="radio" name="sort_table" class="cookie-btn" value="open_asc" onchange="this.form.submit()"
+                         <?= ($sort === 'open_asc') ? 'checked' : '' ?>>
                     </div>
                     <div class="button-group">
                          <label><i class="fa-solid fa-map-marker-alt"></i> LOCATION (A-Z)</label>
-                         <input type="radio" id="six" name="sort_table" class="cookie-btn" value="Location">
+                         <input type="radio" name="sort_table" class="cookie-btn" value="loc_asc" onchange="this.form.submit()"
+                         <?= ($sort === 'loc_asc') ? 'checked' : '' ?>>
+                    </div>
+                    <div class="button-group">
+                         <label><i class="fa-solid fa-map-marker-alt"></i> LOCATION (Z-A)</label>
+                         <input type="radio" name="sort_table" class="cookie-btn" value="loc_desc" onchange="this.form.submit()"
+                         <?= ($sort === 'loc_desc') ? 'checked' : '' ?>>
                     </div>
                     <div class="button-group">
                          <label><i class="fa-solid fa-shapes"></i> CATEGORY (A-Z)</label>
-                         <input type="radio" id="seven" name="sort_table" class="cookie-btn" value="Action">
+                         <input type="radio" name="sort_table" class="cookie-btn" value="cat_asc" onchange="this.form.submit()"
+                         <?= ($sort === 'cat_asc') ? 'checked' : '' ?>>
+                    </div>
+                     <div class="button-group">
+                         <label><i class="fa-solid fa-shapes"></i> CATEGORY (Z-A)</label>
+                         <input type="radio" name="sort_table" class="cookie-btn" value="cat_desc" onchange="this.form.submit()"
+                         <?= ($sort === 'cat_desc') ? 'checked' : '' ?>>
                     </div>
                     <div class="button-group">
                          <label><i class="fa-solid fa-paper-plane"></i> WHEN ADDED (DEFAULT)</label>
-                         <input type="radio" id="eight" name="sort_table" class="cookie-btn" value="Def" checked>
+                         <input type="radio" name="sort_table" class="cookie-btn" value="when_add" onchange="this.form.submit()"
+                         <?= ($sort === 'when_add') ? 'checked' : '' ?>>
                     </div>
+                </form>
                 </div>
             </aside>
         </div>

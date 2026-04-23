@@ -14,7 +14,7 @@
       slidesToScroll: 1,
       autoplay: true,
       infinite: true,
-      autoplaySpeed: 5600,
+      autoplaySpeed: 4600,
       arrows: false,
       speed: 3800,
       fade: true,

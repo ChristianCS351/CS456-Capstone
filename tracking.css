@@ -6,6 +6,7 @@
     --primary-dark: #003300;
     --accent: #ffb300;
     --bg-light: #f3f4f6;
+    --back-light: #f6f3d8;
     --surface: #ffffff;
     --text-main: #1f2937;
     --text-muted: #6b7280;
@@ -23,7 +24,7 @@
 body {
     font-family: var(--font-family);
     color: var(--text-main);
-    background-color: var(--bg-light);
+    background-color: var(--back-light);
     line-height: 1.6;
     overflow-x: hidden;
 }
@@ -272,10 +273,19 @@ body {
 }
 
 .modern-table td {
-    padding: 15px 10px;
+    padding: 5px 5px;
     border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
+    border-top: 2px solid var(--border-color);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
 }
+
+.modern-table td:hover{
+    color: #a6a9a5;
+}
+
 
 .modern-table tbody tr {
     transition: background 0.2s ease;
@@ -288,8 +298,15 @@ body {
 /* Badges */
 .badge {
     padding: 6px 12px;
-    border-radius: 50px;
-    font-size: 0.85rem;
+    border-radius: 80px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge :hover{
+    padding: 6px 12px;
+    border-radius: 80px;
+    font-size: 0.8rem;
     font-weight: 600;
 }
 
@@ -299,10 +316,17 @@ body {
 }
 
 .badge-location {
-    background: #f3f4f6;
     color: var(--text-muted);
-    border: 1px solid #e5e7eb;
 }
+
+.badge-location :hover{
+    color: #a6a9a5;
+}
+
+.badge-qty :hover{
+    color: #a6a9a5;
+}
+
 
 /* Action Buttons in Table */
 .action-cell {
@@ -347,6 +371,60 @@ body {
 .btn-warning:hover {
     background: #f59e0b;
     color: white;
+}
+
+/* Colors for expiration */
+.normal {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    height: 20px;
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: #000; 
+    background: #f3f4f6;
+    border: 1px solid #1c1c1d;
+}
+
+.expiring {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    height: 20px;
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+    background: #ffe5a2;
+    border: 1px solid #886e3a;
+    color: #d5840a;
+}
+
+.expired {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    height: 20px;
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+    background: #ff1515;
+    border: 1px solid #783737;
+    color: #9e2308;
+}
+
+.expired-dark {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    height: 20px;
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+    background: #6d0707;
+    border: 1px solid #7a7676;
+    color: #eee9e9;
 }
 
 /* =========== FORMS =========== */

@@ -44,9 +44,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['list'])) {
     }
 }
 
+/* ------------------ DELETE SINGLE ITEM ------------------ */
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+    $stmt = $conn->prepare("DELETE FROM `$shop_table` WHERE id = ?");
+    $stmt->bind_param("i", $_POST['delete_id']);
+    $stmt->execute();
+    $stmt->close();
+
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
 // FETCH CURRENT SHOPPING LIST
 $listItems = [];
-$result = $conn->query("SELECT id, name, quantity FROM `$shop_table` ORDER BY id ASC");
+// $result = $conn->query("SELECT id, name, quantity FROM `$shop_table` ORDER BY id ASC");
+$sort = isset($_GET['sort_table']) ? $_GET['sort_table'] : 'name_asc';
+
+switch ($sort) {
+    case 'qty_desc':
+        $orderBy = "quantity DESC";
+        break;
+     case 'qty_asc':
+        $orderBy = "quantity ASC";
+        break;
+     case 'name_desc':
+        $orderBy = "name DESC";
+        break;
+     default:
+        $orderBy = "name ASC";
+       
+        break;
+}
+$result = $conn->query("SELECT id, name, quantity FROM $shop_table ORDER BY $orderBy");
+
 if ($result) {
     while ($row = $result->fetch_assoc()) {
         $listItems[] = $row;
@@ -128,8 +158,14 @@ if ($result) {
                             <?php if (!empty($listItems)): ?>
                                 <?php foreach ($listItems as $row): ?>
                                     <tr>
-                                        <td><strong><?= htmlspecialchars($row['name']) ?></strong></td>
-                                        <td><span class="badge badge-location"><?= htmlspecialchars($row['quantity']) ?></span></td>
+                                        <td class="text-center"><strong><?= htmlspecialchars($row['name']) ?></strong></td>
+                                        <td class="text-center"><span class="badge badge-location"><?= htmlspecialchars($row['quantity']) ?></span></td>
+                                        <td class="action-cell">
+                                            <form method="POST" class="inline-form">
+                                                <input type="hidden" name="delete_id" value="<?= $row['id'] ?>">
+                                                <button type="submit" class="btn-action btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -140,8 +176,8 @@ if ($result) {
                 </div>
 
                 <div class="card-footer action-buttons">
-                    <button type="button" class="btn-action btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-                    <button type="button" class="btn-action btn-primary" onclick="handlePrint()"><i class="fa-solid fa-print"></i> Print</button>
+                    <button type="button" class="btn-actions btn-success"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    <button type="button" class="btn-actions btn-primary" onclick="handlePrint()"><i class="fa-solid fa-print"></i> Print</button>
                 </div>
 
                 <!-- HIDDEN FORM USED TO CLEAR LIST AFTER PRINT -->
@@ -195,24 +231,33 @@ if ($result) {
                         <p id="scan_result" class="scan-result-text"></p>
                     </div>    
                 </div>
-
-
+   
                  <div class="sort-section card-modern mt-4">
+                 <form method="GET" id="sortForm">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-puzzle-piece"></i> Sort Table</h2>
                     </div>
                       <div class="button-group">
                          <label><i class="fa-solid fa-tag"></i> NAME (A-Z) (DEFAULT)</label>
-                         <input type="radio" id="one" name="sort_table" class="cookie-btn" value="Name" checked>
+                         <input type="radio"  name="sort_table" class="cookie-btn" value="name_asc" onchange="this.form.submit()"
+                         <?= ($sort === 'name_asc') ? 'checked' : '' ?>>
                       </div>
                     <div class="button-group">
+                         <label><i class="fa-solid fa-tag"></i> NAME (Z-A)</label>
+                         <input type="radio"  name="sort_table" class="cookie-btn" value="name_desc" onchange="this.form.submit()"
+                         <?= ($sort === 'name_desc') ? 'checked' : '' ?>>
+                    </div>
+                    <div class="button-group">
                          <label><i class="fa-solid fa-layer-group"></i> QTY (High->Low)</label>
-                         <input type="radio" id="two" name="sort_table" class="cookie-btn" value="QTY_High">
+                         <input type="radio" name="sort_table" class="cookie-btn" value="qty_desc" onchange="this.form.submit()"
+                         <?= ($sort === 'qty_desc') ? 'checked' : '' ?>>
                     </div>
                     <div class="button-group">
                          <label><i class="fa-solid fa-layer-group"></i> QTY (Low->High)</label>
-                         <input type="radio" id="three" name="sort_table" class="cookie-btn" value="QTY_Low">
+                         <input type="radio" name="sort_table" class="cookie-btn" value="qty_asc" onchange="this.form.submit()"
+                         <?= ($sort === 'qty_asc') ? 'checked' : '' ?>>
                     </div>
+                  </form>
                   </div>
             </aside>
         </div>

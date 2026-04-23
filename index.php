@@ -32,11 +32,26 @@ if (isset($_GET['exp']) && $_GET['exp'] == 10) {
 
 $expiringStmt = $pdo->prepare("SELECT name, expiration_date, quantity 
                                FROM `$pantry_table` 
-                               ORDER BY expiration_date ASC 
+                                WHERE expiration_date IS NOT NULL
+                                 AND expiration_date <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
                                LIMIT :lim");
 $expiringStmt->bindValue(':lim', (int)$exp_limit, PDO::PARAM_INT);
 $expiringStmt->execute();
 $expiringFoods = $expiringStmt->fetchAll();
+
+//Food expiring color system.
+function getDateClass($date) {
+    if (!$date) return '';
+    $today = new DateTime();
+    $target = new DateTime($date);
+    $diff = (int)$today->diff($target)->format('%r%a'); 
+
+    if ($diff < -5) return 'expired-dark';
+    if ($diff < 0)  return 'expired';
+    if ($diff < 7) return 'expiring';
+
+    return 'normal';
+}
 
 // ---------------------------------------------------------------------------
 // GROCERY LIST LIMIT (default 5 → expand to 10)
@@ -126,6 +141,11 @@ $groceryItems = $groceryStmt->fetchAll();
             <!-- EXPIRING SOON SECTION -->
             <section class="dashboard-card" id="expiring-soon">
                 <div class="card-header">
+                    <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:10px; font-size:0.9rem;">
+                    <span><span class="expiring">●</span> Expiring ≤ 7 days</span>
+                    <span><span class="expired">●</span> Expired ≤ 5 days</span>
+                    <span><span class="expired-dark">●</span> Expired > 5 days</span>
+                </div>
                     <h2><i class="fa-solid fa-triangle-exclamation" style="color:#ffb300;"></i> Expiring Soon</h2>
                 </div>
                 <div class="table-responsive">
@@ -142,7 +162,7 @@ $groceryItems = $groceryStmt->fetchAll();
                                 <?php foreach ($expiringFoods as $food): ?>
                                     <tr>
                                         <td><strong><?= htmlspecialchars($food['name']) ?></strong></td>
-                                        <td><span class="badge badge-warning"><?= htmlspecialchars($food['expiration_date']) ?></span></td>
+                                        <td class="<?= getDateClass($food['expiration_date']) ?>"><?= htmlspecialchars($food['expiration_date']) ?></td>
                                         <td><?= htmlspecialchars($food['quantity']) ?></td>
                                     </tr>
                                 <?php endforeach; ?>
