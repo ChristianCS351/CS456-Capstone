@@ -439,6 +439,31 @@ td {
     color: #b37e00;
 }
 
+/* Alerts */
+.alert {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.message-error {
+    background: rgba(220, 38, 38, 0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.message-success {
+    background: rgba(76, 175, 80, 0.15);
+    color: #86efac;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+
 /* =========== FOOTER =========== */
 footer {
     background: white;

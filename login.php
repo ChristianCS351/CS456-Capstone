@@ -9,6 +9,12 @@ $db   = "pantry";
 
 //creates connection
 $conn = new mysqli($host, $user, $pass, $db);
+$deleted = "";
+$fromDeletePage = true;
+
+if ($fromDeletePage && isset($_GET['deleted']) && $_GET['deleted'] == '1') {
+    $deleted = "Your Account was deleted";
+}
 
 //checks connection
 if ($conn->connect_error) {
@@ -23,6 +29,7 @@ if (isset($_SESSION['user_id'])) {
 
 $messageLogin = "";
 $messageRegister = "";
+$messageError = "";
 
 // LOGIN
 if (isset($_POST['login'])) {
@@ -67,8 +74,26 @@ if (isset($_POST['register'])) {
     // store username's pantry DB name
     $dbName = preg_replace("/[^a-zA-Z0-9_]/", "", $username) . "_pantry";
 
+
+    // I used this helpful source from geekforgeeks to help me write code that stops the user from 
+    // creating an account with the same username in the users table.
+    // It makes sure each account has its own unique username and their are no duplicates. 
+    // https://www.geeksforgeeks.org/php/creating-a-registration-and-login-system-with-php-and-mysql/
+
+    $checkstmt =  $conn->prepare ("SELECT username from users WHERE username = ?");
+    $checkstmt->bind_param("s",$username);
+    $checkstmt->execute();
+    $checkstmt->store_result();
+
+    if ($checkstmt->num_rows > 0) {
+        $messageError = "Sorry this account already exists, Please choose a different username for this account!";
+    }
+
+    else {
+
     $stmt = $conn->prepare("INSERT INTO users (username, password, email, full_name, phone) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $username, $hash, $email, $full_name, $phone);
+    
 
     if ($stmt->execute()) {
         $cleanUsername = preg_replace("/[^a-zA-Z0-9_]/", "", strtolower($username));
@@ -80,16 +105,17 @@ if (isset($_POST['register'])) {
         
         if ($conn->query($createPantrySql) === TRUE && $conn->query($createShopSql) === TRUE) {
             $messageRegister = "Your Account was created :D. Log in and pantry my friend!";
-        } else {
-            $messageRegister = "User created, but error creating tables :( " . $conn->error;
-        }
-    } else {
+      }
+    }  else {
         $messageRegister = "Error: Username may already exist.";
-    }
-
+        }
+    
     $stmt->close();
+    }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -130,6 +156,7 @@ if (isset($_POST['register'])) {
         </div>
     </nav>
 
+
     <div class="login-hero">
         <div class="hero-overlay"></div>
     </div>
@@ -159,7 +186,7 @@ if (isset($_POST['register'])) {
                 </form>
 
                 <?php if ($messageLogin): ?>
-                    <div class="alert message-error">
+                    <div class="alert message-login">
                         <i class="fa-solid fa-circle-exclamation"></i> <?= htmlspecialchars($messageLogin) ?>
                     </div>
                 <?php endif; ?>
@@ -207,6 +234,25 @@ if (isset($_POST['register'])) {
                     <div class="alert message-success">
                         <i class="fa-solid fa-check-circle"></i> <?= htmlspecialchars($messageRegister) ?>
                     </div>
+                <?php endif; ?>
+
+                <?php if ($messageError): ?>
+                    <div class="alert message-error">
+                        <i class="fa-solid fa-question"></i> <?= htmlspecialchars($messageError) ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($deleted): ?>
+                    <div id="Popup" class="pop_screen fadeOut">
+                        <i class="fa-notdog fa-solid fa-xmark"></i> <?= htmlspecialchars($deleted) ?>
+                        
+                    </div>
+
+                    <script>
+                        setTimeOut(() => {
+                        document.getElementById("Popup").style.display = "none"; 
+                        }, 1500);
+                    </script>
                 <?php endif; ?>
             </div>
         </div>

@@ -20,6 +20,12 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
+// Prevent access if not logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 // ---------------------------------------------------------------------------
 $pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
 $shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'shop_list';

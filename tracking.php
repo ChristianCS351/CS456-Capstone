@@ -31,6 +31,12 @@ function redirect() {
     exit;
 }
 
+// Prevent access if not logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 /* ============================================================
    CHECK BARCODE
 ============================================================ */

@@ -23,6 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clear_list'])) {
     exit;
 }
 
+// Prevent access if not logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 // INSERT ITEM INTO shop_list
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['list'])) {
     $name     = trim($_POST['item_name']);

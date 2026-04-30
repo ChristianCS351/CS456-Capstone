@@ -14,78 +14,113 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    session_unset();    
-    session_destroy();   
-    header("Location: login.php");
-    exit;
-}
-
 // Prevent access if not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
+
     try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }
 
-
 $pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
-
-// DB connection
-$conn = new mysqli("localhost", "root", "mysql", "pantry");
-
 $user_id = $_SESSION['user_id'];
 
-$stmt = $conn->prepare("SELECT username, email, full_name, phone FROM users WHERE user_id = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$userInfo = $result->fetch_assoc();
-$stmt->close();
+$stmt = $pdo->prepare("SELECT username, email, full_name, phone FROM users WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$userInfo = $stmt->fetch();
 
-// EXPIRING SOON LIMIT (default 5 → expand to 10)
-$exp_limit = 5;
-if (isset($_GET['exp']) && $_GET['exp'] == 5) {
-    $exp_limit = 10;
+if (!$userInfo) {
+    die("User not found.");
 }
 
-// items expiring within the next 7 days (including today)
-$expiringStmt = $pdo->prepare("SELECT name, expiration_date, quantity 
-                               FROM `$pantry_table` 
-                                WHERE expiration_date IS NOT NULL
-                                AND expiration_date >= DATE_ADD(CURDATE(), INTERVAL 1 DAY)
-                                AND expiration_date <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
-                               LIMIT :lim");
+
+$pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
+$shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'foods';
 
 
-$expiringStmt->bindValue(':lim', (int)$exp_limit, PDO::PARAM_INT);
-$expiringStmt->execute();
-$expiringFoods = $expiringStmt->fetchAll();
 
-//Food expiring color system.
-function getDateClass($date) {
-    if (!$date) return '';
-    $today = new DateTime();
-    $target = new DateTime($date);
-    $diff = (int)$today->diff($target)->format('%r%a'); 
+// DB connection
+// $conn = new mysqli("localhost", "root", "mysql", "pantry");
 
-    if ($diff < -5) return 'expired-dark';
-    if ($diff < 0)  return 'expired';
-    if ($diff <= 7) return 'expiring';
+// $stmt = $conn->prepare("SELECT username, email, full_name, phone FROM users WHERE user_id = ?");
+// $stmt->bind_param("i", $user_id);
+// $stmt->execute();
+// $result = $stmt->get_result();
+// $userInfo = $result->fetch_assoc();
+// $stmt->close();
 
-    return 'normal';
+
+// Used this helpful source to help me get ideas on how to delete tables. https://www.mssqltips.com/sqlservertip/6769/sql-server-drop-table-if-exists/
+// I also used this incredible source as well. https://www.w3schools.com/php/php_mysql_delete.asp
+// Delete Account from Database Section
+
+if (isset($_POST['delete'])) {
+     try {
+        $pdo->beginTransaction();
+
+        $deleteUser = $pdo->prepare("DELETE FROM users WHERE user_id = ?");
+        $deleteUser->execute([$user_id]);
+
+        //This drops the Table Stuff for both pantry and shopping list
+
+        $pantryTable = $_SESSION['pantry_table'] ?? null;
+        if ($pantryTable) {
+            $pdo->exec("DROP TABLE IF EXISTS `$pantryTable`");
+        }
+
+        $shopTable = $_SESSION['shop_table'] ?? null;
+        if ($shopTable) {
+            $pdo->exec("DROP TABLE IF EXISTS `$shopTable`");
+        }
+
+        if($pdo->inTransaction()) {
+        $pdo->commit();
+        }
+
+        $_SESSION = [];
+        session_destroy();
+
+        header("Location: login.php?deleted=1");
+        exit;
+
+    } catch (Exception $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+        die("Error deleting account: " . $e->getMessage());
+    }
 }
+
+//    $conn = mysqli_connect($host, $user, $pass, $dbname);
+// // Check connection
+//    if (!$conn) {
+//         die("Connection failed: " . mysqli_connect_error());
+// }
+
+// // SQL to delete a record
+//     $sql_delete = "DELETE FROM users WHERE phone = ($userInfo['phone'])";
+//     $sql_delete2 = "DROP * FROM TABLE `christianc3_pantry`";
+
+//     if ($conn->query($sql_delete) === TRUE && $conn->query($sql_delete2) === TRUE) {
+//             $messageDelete = "Your Account was Deleted :(";
+//         } else {
+//             $messageDelete = "User deleted, but error creating tables :( " . $conn->error;
+//         }
+
+
+// mysqli_close($conn);
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Info - Pantry Pilot</title>
+    <title>Delete - Pantry Pilot</title>
     <link rel="icon" type="image/x-icon" href="favicon-32x32.png">
 
     <!-- Modern Fonts and Icons -->
@@ -110,7 +145,7 @@ function getDateClass($date) {
                 <a href="about.php">About & Help</a>
             </div>
              <div class="nav-right">
-                <a href="AccountInfo.php" class="active">Account Info</a>
+                <a href="AccountInfo.php">Account Info</a>
                 <a href="login.php" class="btn-login">Login</a>
                 <a href="delete.php" class="btn-delete">Delete</a>
             </div>
@@ -140,11 +175,12 @@ function getDateClass($date) {
                     <h2><i class="fa-solid fa-address-card" style="color: #d00000" ></i> Delete</h2>
                 </div>
 
-                    <!-- Note: For demo purposes, we direct logout to login.php. Normally this calls logout.php -->
-                     <form method="POST" id="clear_form">
-                        <button type="button" href="login.php" class="btn-action btn-danger d-block mt-4 text-center" class="logout-btn" onclick=deleteOut()>
+                    <!-- This asks the User if they want to delete their account. -->
+                    <form method="POST" id="delete_form">
+                        <button type="submit" name="delete" class="btn-action btn-danger d-block mt-4 text-center" class="logout-btn" onclick= "return deleteOut()">
                         <i class="fa-solid fa-bomb"></i>Delete Account
-                     </form>
+                        </button>
+                    </form>
                 </div>
             </div>
 

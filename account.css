@@ -391,12 +391,13 @@ td {
 .btn-danger {
     background: #e3bebe;
     color: #dc2626;
-    border: 1px solid #f87171;
+    border: 2px dashed #fc6969;
 }
 
 .btn-danger:hover {
     background: #ef4444;
     color: white;
+    border: 2px dashed #f9c5c0;
     transform: translateY(-2px);
 }
 
