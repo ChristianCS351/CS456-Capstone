@@ -1,3 +1,7 @@
+<!-- This was intended to be a load in screen if our website were to be in the form of an app and it has a nice loading animation when you start the app, as many
+apps usually have some sort of load in animation screen. Do to time constraints this wasn't finished. -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

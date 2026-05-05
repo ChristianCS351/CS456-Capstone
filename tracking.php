@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-/* ------------------ DB CONFIG ------------------ */
+/* Database Configurations that Connect with Local Host */
 $host = 'localhost';
 $db   = 'pantry';
 $user = 'root';
@@ -16,7 +16,7 @@ try {
     die("DB Connection Failed: " . $e->getMessage());
 }
 
-/* ------------------ TABLES ------------------ */
+/* Tables that it connects to in phpMyAdmin. */
 $pantry_table = $_SESSION['pantry_table'] ?? 'foods';
 $shop_table   = $_SESSION['shop_table'] ?? 'shop_list';
 
@@ -31,15 +31,13 @@ function redirect() {
     exit;
 }
 
-// Prevent access if not logged in
+// This prevents access if the user is currently not logged in on the website.
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
-/* ============================================================
-   CHECK BARCODE
-============================================================ */
+// Barcode Scanner Section
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['check_barcode'])) {
 
     $barcode = trim($_GET['check_barcode']);
@@ -123,18 +121,14 @@ $stmt = $pdo->query("SELECT id, name, quantity FROM `$pantry_table` ORDER BY $or
 $shop_items = $stmt->fetchAll();
 
 
-/* ============================================================
-   DELETE ITEM
-============================================================ */
+// This allows the to delete an item at a time and the button for doing that is in the form of a red trash can.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $pdo->prepare("DELETE FROM `$pantry_table` WHERE id = ?")
         ->execute([(int)$_POST['delete_id']]);
     redirect();
 }
 
-/* ============================================================
-   ADD TO SHOPPING LIST
-============================================================ */
+// Add to shopping list section for barcode
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['shop_id'])) {
 
     $stmt = $pdo->prepare("
@@ -178,9 +172,7 @@ function getDateClass($date) {
     return 'normal';
 }
 
-/* ============================================================
-   QUICK UPDATE (SCAN AGAIN)
-============================================================ */
+// Scan Again
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['quick_update_item'])) {
 
     $pdo->prepare("
@@ -197,9 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['quick_update_item']))
     redirect();
 }
 
-/* ============================================================
-   ADD ITEM
-============================================================ */
+//Add an item
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
 
     $name     = trim($_POST['name']);
@@ -260,9 +250,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
     }
 }
 
-/* ============================================================
-   FETCH PANTRY
-============================================================ */
 $stmt = $pdo->query("
     SELECT id, name, quantity, expiration_date, open_date, location, category
     FROM `$pantry_table`
@@ -287,7 +274,8 @@ $pantry_items = $stmt->fetchAll();
 </head>
 <body class="tracking-page">
 
-    <!-- Top Navigation -->
+
+    <!-- Navigation Section -->
     <nav class="top-nav">
         <div class="nav-container">
             <div class="nav-left">
@@ -310,7 +298,7 @@ $pantry_items = $stmt->fetchAll();
         </div>
     </nav>
 
-    <!-- Mini Hero Section -->
+    <!-- Hero Section -->
     <header class="mini-hero">
         <div class="mini-hero-bg"></div>
         <div class="hero-overlay"></div>
@@ -323,7 +311,7 @@ $pantry_items = $stmt->fetchAll();
     <main class="main-content">
         <div class="split-layout">
             
-            <!-- Left: Pantry Table -->
+            <!-- Left Table: Displays the items that are currently in the pantry and lists various categories in a table. -->
             <section class="pantry-section card-modern">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-cubes"></i> Current Inventory</h2>
@@ -377,9 +365,9 @@ $pantry_items = $stmt->fetchAll();
                     </table>
                 </div>
             </section>
-            <!-- Right: Add Item & Scanner -->
+
+            <!-- Right Table: This is where the user adds items through manual inputs or throigh using the quickscan barcode feature. -->
             <aside class="sidebar-section">
-                <!-- Add Item Form -->
                 <div class="form-section card-modern">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-plus-circle"></i> Add an Item</h2>
@@ -444,7 +432,7 @@ $pantry_items = $stmt->fetchAll();
                     </div>
                 </div>
 
-                <!-- Table Sort Section -->
+                <!-- Table Sort Section, just click the cookie to change how table is displayed -->
                 <div class="sort-section card-modern mt-4">
                 <form method="GET" id="sortForm">
                     <div class="card-header">
@@ -520,6 +508,7 @@ $pantry_items = $stmt->fetchAll();
             </aside>
         </div>
     </main>
+    
     <!-- Quick Scan Update Modal -->
     <div id="quickScanModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
         <div class="modal-content card-modern" style="background: white; padding: 25px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
@@ -540,7 +529,7 @@ $pantry_items = $stmt->fetchAll();
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Scripts/Javascript -->
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="barcode_scanner.js?v=1.1"></script>
 </body>

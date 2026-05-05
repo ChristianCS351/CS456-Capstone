@@ -1,4 +1,7 @@
-/* =========== GLOBAL & VARIABLES =========== */
+/* This is the CSS file for our website's account info page.  */
+
+
+/* These are our global & our variables  */
 :root {
     --primary-color: #1b5e20;
     --primary-light: #4caf50;
@@ -46,7 +49,8 @@ body::before {
 }
 
 
-/* =========== NAVIGATION =========== */
+/* Navigation Section */
+
 .top-nav {
     position: fixed;
     top: 0;
@@ -103,6 +107,7 @@ body::before {
     margin-right: 20px;
 }
 
+/* Button Section */
 .btn-login {
     background: var(--primary-color) !important;
     color: white !important;
@@ -138,7 +143,8 @@ body::before {
     background: rgba(27, 94, 32, 0.05);
 }
 
-/* =========== MINI HERO =========== */
+/* Mini Hero Section */
+
 .mini-hero {
     position: relative;
     height: 30vh;
@@ -188,7 +194,7 @@ td {
 }
 
 
-/* =========== CONTENT ROW =========== */
+/* Our Main Content is here */
 .main-content {
     max-width: 1000px;
     margin: -60px auto 60px;
@@ -214,7 +220,7 @@ td {
 }
 
 
-/* =========== MODERN CARDS =========== */
+/* Modern Card Section */
 .card-modern {
     background: var(--surface-glass);
     border: 1px solid var(--border-glass);
@@ -374,7 +380,7 @@ td {
 }
 
 
-/* Buttons */
+/*  More Buttons */
 .btn-action {
     border: none;
     padding: 30px;
@@ -434,7 +440,8 @@ td {
     color: #b37e00;
 }
 
-/* =========== FOOTER =========== */
+/* This was intended to be the footer, but we took it out because we didn't think it was needed */
+
 footer {
     background: white;
     padding: 30px 20px;
@@ -469,7 +476,7 @@ footer {
     }
 }
 
-/* =========== MOBILE RESPONSIVENESS =========== */
+/* Mobile Compatability */
 @media (max-width: 850px) {
     .nav-container {
         flex-direction: column;

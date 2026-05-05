@@ -1,4 +1,7 @@
-/* =========== GLOBAL & VARIABLES =========== */
+/* This is the CSS file for our website's Login page.  */
+
+
+/* These are our global & our variables  */
 :root {
     --primary-color: #1b5e20;
     --primary-light: #4caf50;
@@ -71,7 +74,7 @@ body.login-page::before {
     z-index: -1;
 }
 
-/* =========== NAVIGATION =========== */
+/* Navigation Section */
 .top-nav {
     position: fixed;
     top: 0;
@@ -168,7 +171,7 @@ body.login-page::before {
     background: rgba(27, 94, 32, 0.05);
 }
 
-/* =========== GLASS CONTAINERS =========== */
+/* Main Content Section */
 .main-content {
     max-width: 1000px;
     margin: calc(var(--nav-height) + 60px) auto 60px;
@@ -236,7 +239,7 @@ body.login-page::before {
     font-size: 0.95rem;
 }
 
-/* =========== FORMS =========== */
+/* Form Section for Logging in or Registering */
 .modern-form {
     display: flex;
     flex-direction: column;
@@ -350,7 +353,7 @@ body.login-page::before {
     border: 1px solid rgba(107, 58, 28, 0.3);
 }
 
-/* =========== FOOTER =========== */
+/* This was intended to be the footer, but we took it out because we didn't think it was needed */
 footer {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(0, 0, 0, 0.3);
@@ -388,7 +391,7 @@ footer {
     }
 }
 
-/* =========== MOBILE RESPONSIVENESS =========== */
+/* Mobile Compatability */
 @media (max-width: 850px) {
     .nav-container {
         flex-direction: column;

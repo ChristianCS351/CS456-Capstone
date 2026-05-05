@@ -35,6 +35,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
 
+
 // DB connection
 $conn = new mysqli("localhost", "root", "mysql", "pantry");
 
@@ -65,6 +66,7 @@ $expiringStmt = $pdo->prepare("SELECT name, expiration_date, quantity
 $expiringStmt->bindValue(':lim', (int)$exp_limit, PDO::PARAM_INT);
 $expiringStmt->execute();
 $expiringFoods = $expiringStmt->fetchAll();
+
 
 //Food expiring color system.
 function getDateClass($date) {
@@ -120,7 +122,7 @@ function getDateClass($date) {
         </div>
     </nav>
 
-    <!-- Mini Hero Section -->
+    <!-- Hero Section -->
     <header class="mini-hero">
         <div class="mini-hero-bg"></div>
         <div class="hero-overlay"></div>
@@ -133,7 +135,7 @@ function getDateClass($date) {
     <main class="main-content">
         <div class="content-row">
 
-            <!-- account info details -->
+            <!-- The Account Info Details Section is Here -->
             <div class="container card-modern">
                 <div class="card-header">
                     <div class="card-header">
@@ -169,7 +171,7 @@ function getDateClass($date) {
                 </div>
             </div>
 
-            <!-- pantry items that are about to expire -->
+            <!-- This table section lists items that are going to expire within 7 days. -->
             <div class="pantry-box card-modern">
                 <div class="card-header">
                     <div class="card-header">
@@ -213,7 +215,7 @@ function getDateClass($date) {
         </div>
     </main>
 
-    <!-- Optional Scripts -->
+    <!-- Optional Scripts/ Javascript files -->
     <script src="app.js"></script>
     <script src="account.js"></script>
 </body>

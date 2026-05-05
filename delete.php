@@ -14,7 +14,7 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
-// Prevent access if not logged in
+// This Prevents access if the user is currently not logged in.
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
@@ -40,19 +40,6 @@ if (!$userInfo) {
 
 $pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
 $shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'foods';
-
-
-
-// DB connection
-// $conn = new mysqli("localhost", "root", "mysql", "pantry");
-
-// $stmt = $conn->prepare("SELECT username, email, full_name, phone FROM users WHERE user_id = ?");
-// $stmt->bind_param("i", $user_id);
-// $stmt->execute();
-// $result = $stmt->get_result();
-// $userInfo = $result->fetch_assoc();
-// $stmt->close();
-
 
 // Used this helpful source to help me get ideas on how to delete tables. https://www.mssqltips.com/sqlservertip/6769/sql-server-drop-table-if-exists/
 // I also used this incredible source as well. https://www.w3schools.com/php/php_mysql_delete.asp
@@ -94,26 +81,6 @@ if (isset($_POST['delete'])) {
         die("Error deleting account: " . $e->getMessage());
     }
 }
-
-//    $conn = mysqli_connect($host, $user, $pass, $dbname);
-// // Check connection
-//    if (!$conn) {
-//         die("Connection failed: " . mysqli_connect_error());
-// }
-
-// // SQL to delete a record
-//     $sql_delete = "DELETE FROM users WHERE phone = ($userInfo['phone'])";
-//     $sql_delete2 = "DROP * FROM TABLE `christianc3_pantry`";
-
-//     if ($conn->query($sql_delete) === TRUE && $conn->query($sql_delete2) === TRUE) {
-//             $messageDelete = "Your Account was Deleted :(";
-//         } else {
-//             $messageDelete = "User deleted, but error creating tables :( " . $conn->error;
-//         }
-
-
-// mysqli_close($conn);
-// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -155,7 +122,7 @@ if (isset($_POST['delete'])) {
         </div>
     </nav>
 
-    <!-- Mini Hero Section -->
+    <!-- Hero Section -->
     <header class="mini-hero">
         <div class="mini-hero-bg"></div>
         <div class="hero-overlay"></div>
@@ -168,7 +135,7 @@ if (isset($_POST['delete'])) {
     <main class="main-content">
         <div class="content-row">
 
-            <!-- account info details -->
+            <!-- This is where the delete button action is -->
             <div class="container card-modern">
                 <div class="card-header">
                     <div class="card-header">
@@ -184,7 +151,7 @@ if (isset($_POST['delete'])) {
                 </div>
             </div>
 
-            <!-- pantry items that are about to expire -->
+            <!-- Gives warnings for deleting account -->
             <div class="pantry-box card-modern">
                 <div class="card-header">
                     <div class="card-header">

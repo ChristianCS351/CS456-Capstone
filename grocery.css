@@ -1,4 +1,7 @@
-/* =========== GLOBAL & VARIABLES =========== */
+/* This is the CSS file for our website's grocery list page.  */
+
+
+/* These are our global & our variables  */
 :root {
     --primary-color: #1b5e20;
     --primary-light: #4caf50;
@@ -29,7 +32,7 @@ body {
     overflow-x: hidden;
 }
 
-/* =========== NAVIGATION =========== */
+/* Navigation Section */
 .top-nav {
     position: fixed;
     top: 0;
@@ -122,7 +125,7 @@ body {
     background: rgba(27, 94, 32, 0.05);
 }
 
-/* =========== MINI HERO =========== */
+/* Hero Section */
 .mini-hero {
     position: relative;
     height: 30vh;
@@ -180,7 +183,7 @@ body {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* =========== SPLIT LAYOUT =========== */
+/* Our Main Content Section */
 .main-content {
     max-width: 1000px;
     margin: -40px auto 60px;
@@ -214,7 +217,7 @@ body {
     }
 }
 
-/* =========== MODERN CARDS =========== */
+/* Card Section */
 .card-modern {
     background: var(--surface);
     border-radius: 16px;
@@ -318,7 +321,7 @@ body {
     border: 1px solid #e5e7eb;
 }
 
-/* Action Buttons */
+/* More Action Buttons */
 .card-footer {
     padding: 20px 24px;
     border-top: 1px solid var(--border-color);
@@ -482,7 +485,7 @@ body {
     border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
-/* =========== SCANNER =========== */
+/* Scanning Feature Section */
 .scan-body {
     padding: 24px;
 }
@@ -515,7 +518,7 @@ body {
 }
 
 
-/* =========== TABLE OPTIONS ========== */
+/* Button Section for the Table Options */
 
 .button-group {
     display: flex;
@@ -600,7 +603,7 @@ body {
             color: #ffffff;
         }
 
-/* =========== FOOTER =========== */
+/* This was intended to be the footer, but we took it out because we didn't think it was needed */
 footer {
     background: white;
     padding: 30px 20px;
@@ -651,7 +654,7 @@ footer {
     }
 }
 
-/* ===== PRINT ONLY SHOPPING LIST ===== */
+/* Shopping List Printing Format */
 @media print {
     body * {
         visibility: hidden !important;
@@ -683,7 +686,7 @@ footer {
     }
 }
 
-/* =========== MOBILE RESPONSIVENESS =========== */
+/* Mobile Compatability */
 @media (max-width: 850px) {
     .nav-container {
         flex-direction: column;

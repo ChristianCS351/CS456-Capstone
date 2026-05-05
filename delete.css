@@ -1,4 +1,7 @@
-/* =========== GLOBAL & VARIABLES =========== */
+/* This is the CSS file for our website's delete page.  */
+
+
+/* These are our global & our variables  */
 :root {
     --primary-color: #1b5e20;
     --primary-light: #4caf50;
@@ -47,7 +50,7 @@ body::before {
 }
 
 
-/* =========== NAVIGATION =========== */
+/* Navigation Section of the page */
 .top-nav {
     position: fixed;
     top: 0;
@@ -191,7 +194,7 @@ td {
 }
 
 
-/* =========== CONTENT ROW =========== */
+/* The Main Content */
 .main-content {
     max-width: 1000px;
     margin: -60px auto 60px;
@@ -217,7 +220,7 @@ td {
 }
 
 
-/* =========== MODERN CARDS =========== */
+/* Modern Cards Section */
 .card-modern {
     background: var(--surface-glass);
     border: 1px solid var(--border-glass);
@@ -464,7 +467,7 @@ td {
 }
 
 
-/* =========== FOOTER =========== */
+/* This was intended to be the footer, but we took it out because we didn't think it was needed */
 footer {
     background: white;
     padding: 30px 20px;
@@ -499,7 +502,7 @@ footer {
     }
 }
 
-/* =========== MOBILE RESPONSIVENESS =========== */
+/* Mobile Compatability */
 @media (max-width: 850px) {
     .nav-container {
         flex-direction: column;

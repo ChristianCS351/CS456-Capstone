@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id'])) {
 $pantry_table = isset($_SESSION['pantry_table']) ? $_SESSION['pantry_table'] : 'foods';
 $shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'shop_list';
 
-// EXPIRING SOON LIMIT (default 5 → expand to 10)
+// Items expiring Soon.
 $exp_limit = 5;
 if (isset($_GET['exp']) && $_GET['exp'] == 10) {
     $exp_limit = 10;
@@ -59,8 +59,7 @@ function getDateClass($date) {
     return 'normal';
 }
 
-// ---------------------------------------------------------------------------
-// GROCERY LIST LIMIT (default 5 → expand to 10)
+// Expands grocery list rows in table
 $g_limit = 5;
 if (isset($_GET['gro']) && $_GET['gro'] == 10) {
     $g_limit = 10;
@@ -118,7 +117,7 @@ $groceryItems = $groceryStmt->fetchAll();
         </div>
     </nav>
 
-    <!-- Hero Section with Slider -->
+    <!-- Hero Section -->
     <header class="hero-section">
         <div class="hero-slide-wrapper">
             <div class="hero-slide">
@@ -144,7 +143,8 @@ $groceryItems = $groceryStmt->fetchAll();
 
     <main class="main-content">
         <div class="dashboard-grid">
-            <!-- EXPIRING SOON SECTION -->
+
+            <!-- Items that are expiring soon section on the left table. -->
             <section class="dashboard-card" id="expiring-soon">
                 <div class="card-header">
                     <div style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:10px; font-size:0.9rem;">
@@ -188,7 +188,7 @@ $groceryItems = $groceryStmt->fetchAll();
                 </div>
             </section>
 
-            <!-- CURRENT GROCERY LIST SECTION -->
+            <!-- The current grocery list displayed on the right table of the page-->
             <section class="dashboard-card" id="current-grocery">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-cart-shopping" style="color:var(--primary-color);"></i> Shopping List</h2>
@@ -218,6 +218,7 @@ $groceryItems = $groceryStmt->fetchAll();
                     </table>
                 </div>
 
+                <!-- Unused Footer Feature -->
                 <div class="card-footer">
                     <?php if ($g_limit == 5): ?>
                         <a href="?gro=10&exp=<?= $exp_limit ?>" class="btn-link">See More <i class="fa-solid fa-arrow-down"></i></a>
@@ -229,7 +230,7 @@ $groceryItems = $groceryStmt->fetchAll();
         </div>
     </main>
 
-    <!-- Scripts -->
+    <!-- Our Scripts/Javascript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.5.2/jquery-migrate.min.js" integrity="sha512-BzvgYEoHXuphX+g7B/laemJGYFdrq4fTKEo+B3PurSxstMZtwu28FHkPKXu6dSBCzbUWqz/rMv755nUwhjQypw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js" integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

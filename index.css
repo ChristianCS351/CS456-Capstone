@@ -1,4 +1,7 @@
-/* =========== GLOBAL & VARIABLES =========== */
+/* This is the CSS file for our website's Home/Index page.  */
+
+
+/* These are our global & our variables  */
 :root {
     --primary-color: #1b5e20;
     --primary-light: #4caf50;
@@ -30,7 +33,7 @@ body {
     overflow-x: hidden;
 }
 
-/* =========== NAVIGATION =========== */
+/* Navigation Section */
 .top-nav {
     position: fixed;
     top: 0;
@@ -129,7 +132,7 @@ body {
     background: rgba(27, 94, 32, 0.05);
 }
 
-/* =========== HERO SECTION =========== */
+/* Hero Section */
 .hero-section {
     position: relative;
     height: 70vh;
@@ -275,7 +278,7 @@ td {
     transform: translateY(-2px);
 }
 
-/* =========== MAIN DASHBOARD =========== */
+/* The Main Section of the page formatting */
 .main-content {
     max-width: 1200px;
     margin: -60px auto 60px;
@@ -409,7 +412,7 @@ td {
     transition: color 0.3s ease;
 }
 
-/* Colors for expiration */
+/* This color codes the expiration dates depending how close it is to expiring */
 
 .expiring {
     padding: 6px 12px;
@@ -462,7 +465,7 @@ td {
     color: var(--text-muted);
 }
 
-/* =========== FOOTER =========== */
+/* This was intended to be the footer, but we took it out because we didn't think it was needed */
 footer {
     background: white;
     padding: 30px 20px;
@@ -498,7 +501,7 @@ footer {
     }
 }
 
-/* =========== MOBILE RESPONSIVENESS =========== */
+/* Mobile Compatability */
 @media (max-width: 850px) {
     .nav-container {
         flex-direction: column;

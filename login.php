@@ -100,6 +100,8 @@ if (isset($_POST['register'])) {
         $pantryTable = $cleanUsername . "_pantry";
         $shopTable = $cleanUsername . "_shop";
 
+        
+
         $createPantrySql = "CREATE TABLE IF NOT EXISTS `$pantryTable` LIKE foods";
         $createShopSql = "CREATE TABLE IF NOT EXISTS `$shopTable` LIKE shop_list";
         
@@ -133,7 +135,7 @@ if (isset($_POST['register'])) {
 
 <body class="login-page">
 
-    <!-- Top Navigation -->
+    <!-- Navigation Section -->
     <nav class="top-nav">
         <div class="nav-container">
             <div class="nav-left">
@@ -169,6 +171,7 @@ if (isset($_POST['register'])) {
                     <p>Enter your details to access your pantry.</p>
                 </div>
 
+                <!-- Log-In Section -->
                 <form method="POST" class="modern-form">
                     <div class="input-group">
                         <label><i class="fa-solid fa-user"></i> Username</label>
@@ -198,6 +201,7 @@ if (isset($_POST['register'])) {
                     <p>Join Pantry Pilot and stop food waste today.</p>
                 </div>
 
+                <!-- Register Section -->
                 <form method="POST" class="modern-form">
                     <div class="input-group">
                         <label><i class="fa-solid fa-user-tag"></i> Username</label>
@@ -230,6 +234,8 @@ if (isset($_POST['register'])) {
                     </button>
                 </form>
 
+
+                <!-- This section prints either a sucess message saying the account was created, an error message if username exists, or confirmation that account was deleted. -->
                 <?php if ($messageRegister): ?>
                     <div class="alert message-success">
                         <i class="fa-solid fa-check-circle"></i> <?= htmlspecialchars($messageRegister) ?>
@@ -248,6 +254,7 @@ if (isset($_POST['register'])) {
                         
                     </div>
 
+                   <!-- This fades out the deletion message, so it stays on screen temporarily. -->
                     <script>
                         setTimeOut(() => {
                         document.getElementById("Popup").style.display = "none"; 

@@ -16,7 +16,6 @@ $shop_table = isset($_SESSION['shop_table']) ? $_SESSION['shop_table'] : 'shop_l
 
 $messageList = "";
 
-/* ------------------ CLEAR LIST (DELETE ALL) ------------------ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clear_list'])) {
     $conn->query("DELETE FROM `$shop_table`");
     header("Location: " . $_SERVER['PHP_SELF']);
@@ -50,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['list'])) {
     }
 }
 
-/* ------------------ DELETE SINGLE ITEM ------------------ */
+// This allows the user to delete a single item at a time in the shopping list table. Red trash can button.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $stmt = $conn->prepare("DELETE FROM `$shop_table` WHERE id = ?");
     $stmt->bind_param("i", $_POST['delete_id']);
@@ -107,7 +106,7 @@ if ($result) {
 <body class="grocery-page">
 
 
-    <!-- Top Navigation -->
+    <!-- Navigation Section of the page -->
     <nav class="top-nav">
         <div class="nav-container">
             <div class="nav-left">
@@ -130,7 +129,7 @@ if ($result) {
         </div>
     </nav>
 
-    <!-- Mini Hero Section -->
+    <!-- Hero Section -->
     <header class="mini-hero">
         <div class="mini-hero-bg"></div>
         <div class="hero-overlay"></div>
@@ -143,7 +142,7 @@ if ($result) {
     <main class="main-content">
         <div class="split-layout">
             
-            <!-- Left: Current Grocery List -->
+            <!-- Left Table: Shows the Grocery List to the User and can be printed here as well. -->
             <section class="grocery-section card-modern" id="print_area">
                 <div class="card-header d-flex-between">
                     <h2><i class="fa-solid fa-clipboard-list"></i> Current List</h2>
@@ -186,15 +185,14 @@ if ($result) {
                     <button type="button" class="btn-actions btn-primary" onclick="handlePrint()"><i class="fa-solid fa-print"></i> Print</button>
                 </div>
 
-                <!-- HIDDEN FORM USED TO CLEAR LIST AFTER PRINT -->
+                <!-- This helps clear the grocery list form, which was explained in php comments above -->
                 <form method="POST" id="clear_form" style="display:none;">
                     <input type="hidden" name="clear_list" value="1">
                 </form>
             </section>
 
-            <!-- Right: Add an Item -->
+            <!-- Right Table: Allows the user to add items to the grocery list with name and quantity as the options. -->
             <aside class="sidebar-section">
-                <!-- Add Item Form -->
                 <div class="form-section card-modern">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-plus-circle"></i> Add an Item</h2>
@@ -225,7 +223,7 @@ if ($result) {
                 </div>
 
 
-                <!-- Barcode Scanner -->
+                <!-- Barcode Scanning/Quick Scan Feature -->
                 <div class="scan-section card-modern mt-4">
                     <div class="card-header">
                         <h2><i class="fa-solid fa-barcode"></i> Quick Scan</h2>
@@ -237,7 +235,8 @@ if ($result) {
                         <p id="scan_result" class="scan-result-text"></p>
                     </div>    
                 </div>
-   
+
+             <!-- Table Sort Section, just click the cookie to change how table is displayed -->
                  <div class="sort-section card-modern mt-4">
                  <form method="GET" id="sortForm">
                     <div class="card-header">
@@ -269,7 +268,7 @@ if ($result) {
         </div>
     </main>
 
-    <!-- Scripts -->
+    <!-- Scripts/Javascript -->
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="barcode_scanner.js?v=1"></script>
     <script src="grocery.js"></script>

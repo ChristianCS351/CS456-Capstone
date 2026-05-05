@@ -1,17 +1,4 @@
 <?php
-// Database connection removed for local testing
-// $host = 'localhost';
-// $user = 'root'; 
-// $pass = 'mysql'; 
-// $dbname = '351final';
-
-// try {
-//     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
-//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// } catch (PDOException $e) {
-//     die("Connection failed: " . $e->getMessage());
-// }
-
 $message = "";
 $status_class = "";
 
@@ -46,6 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="about-page">
 
+
+
+
     <!-- Top Navigation aligned with the rest of the site -->
     <nav class="top-nav">
         <div class="nav-container">
@@ -69,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- The Hero Section -->
     <header class="hero-section">
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -79,7 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <main class="main-content">
-        <!-- About Section -->
+    
+        <!-- Our About Section -->
         <section class="about-info card-glass" id="about-info">
             <div class="section-badge"><i class="fa-solid fa-leaf"></i> Our Mission</div>
             <h2>Reduce Waste, Save Time</h2>
@@ -110,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
 
         <div class="grid-layout">
+        
             <!-- Contact Form Section -->
             <section class="contact-section card-glass" id="contact-form">
                 <h2><i class="fa-solid fa-envelope-open-text"></i> Get In Touch</h2>
@@ -140,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
             </section>
 
-            <!-- FAQ Section -->
+            <!-- The FAQ Section -->
             <section class="faq-section card-glass" id="faqs">
                 <h2><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions</h2>
                 <div class="accordion">
@@ -189,9 +181,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 
-    <!-- Interactive Scripts -->
+    <!-- Our Interactive Scripts -->
     <script>
-        // Smooth FAQ Accordion
         document.querySelectorAll('.accordion-header').forEach(button => {
             button.addEventListener('click', () => {
                 const accordionContent = button.nextElementSibling;

@@ -1,3 +1,5 @@
+// This is the JavaScript page for the loading screen.
+
 // I used this incredible source to help me find out how to ease things in and out using a combination of Javascript and HTML.
 // Source: https://bobbyhadz.com/blog/javascript-hide-element-after-few-seconds
 
