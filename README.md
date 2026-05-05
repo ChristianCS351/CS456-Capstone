@@ -29,7 +29,5 @@ If you want to work on improving Pantry Pilot, it is easy to set everything up! 
 
 <img width="647" height="282" alt="Screenshot 2026-04-20 125017" src="https://github.com/user-attachments/assets/57330721-c570-4488-a862-b454d8566523" />
 
-<img width="823" height="236" alt="Screenshot 2026-04-20 125007" src="https://github.com/user-attachments/assets/1f5a357a-9df0-4564-a25b-ba04352e6f32" />
-
 <img width="686" height="158" alt="image" src="https://github.com/user-attachments/assets/1c6f7900-d85a-4990-9112-d601f6ebe4c1" />
 
